@@ -32,12 +32,10 @@ The project is intentionally tooling-first. Early development emphasizes the fra
 
 ### Principles
 
-The following documents will be added in subsequent constitution waves:
-
-- `ARCHITECTURAL_PRINCIPLES.md`
-- `ENGINEERING_PHILOSOPHY.md`
-- `GLOSSARY.md`
-- `AI_ENGINEERING_GUIDE.md`
+- [`ARCHITECTURAL_PRINCIPLES.md`](ARCHITECTURAL_PRINCIPLES.md) — the governing rules for state ownership, dependencies, authoring, runtime behavior, persistence, tooling, and extensibility.
+- [`ENGINEERING_PHILOSOPHY.md`](ENGINEERING_PHILOSOPHY.md) — the expected engineering habits, tradeoffs, review standards, and implementation judgment used throughout the project.
+- [`GLOSSARY.md`](GLOSSARY.md) — the authoritative terminology used across documentation, tickets, code, tools, and reviews.
+- [`AI_ENGINEERING_GUIDE.md`](AI_ENGINEERING_GUIDE.md) — the role boundaries, context controls, authority limits, stop conditions, and reporting requirements for Codex and other AI implementation agents.
 
 ### Execution
 
@@ -82,7 +80,7 @@ Project documentation is a first-class project asset. Significant systems and to
 
 ## Core Terminology
 
-Until the formal Glossary is approved, the following terms are used consistently:
+The formal terminology is maintained in [`GLOSSARY.md`](GLOSSARY.md). The following terms are central:
 
 - **Story Timeline** — the primary editor tool for authoring the game as a chronological, filterable sequence of typed narrative events, including branches, conditions, effects, and persistent state.
 - **Game Director** — the runtime inspection and debugging suite used to understand what is happening, why it is happening, and which state or conditions produced the current result.
@@ -119,8 +117,10 @@ A new contributor should read this file first, followed by:
 
 1. [`PROJECT_MANIFESTO.md`](PROJECT_MANIFESTO.md)
 2. [`PROJECT_VISION.md`](PROJECT_VISION.md)
-3. `ARCHITECTURAL_PRINCIPLES.md` once available
-4. `ENGINEERING_PHILOSOPHY.md` once available
-5. Only the architecture, system, tool, and ticket documents required for the assigned work
+3. [`ARCHITECTURAL_PRINCIPLES.md`](ARCHITECTURAL_PRINCIPLES.md)
+4. [`ENGINEERING_PHILOSOPHY.md`](ENGINEERING_PHILOSOPHY.md)
+5. [`GLOSSARY.md`](GLOSSARY.md) as terminology is needed
+6. [`AI_ENGINEERING_GUIDE.md`](AI_ENGINEERING_GUIDE.md) before assigning or performing AI implementation work
+7. Only the architecture, system, tool, and ticket documents required for the assigned work
 
 This reading order provides shared purpose without unnecessarily expanding a contributor’s context window.
