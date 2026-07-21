@@ -39,11 +39,9 @@ The project is intentionally tooling-first. Early development emphasizes the fra
 
 ### Execution
 
-The following documents will define the approved development order and implementation standards:
-
-- `DEVELOPMENT_ROADMAP.md`
-- `CODING_STANDARDS.md`
-- `THIRD_PARTY_ASSETS.md`
+- [`DEVELOPMENT_ROADMAP.md`](DEVELOPMENT_ROADMAP.md) — the approved phased development order, milestone goals, exit criteria, and deliberate exclusions.
+- [`CODING_STANDARDS.md`](CODING_STANDARDS.md) — the baseline implementation, naming, compatibility, serialization, testing, and review standards.
+- [`THIRD_PARTY_ASSETS.md`](THIRD_PARTY_ASSETS.md) — the evaluation, approval, licensing, isolation, versioning, and replacement policy for external assets and libraries.
 
 ## Authority and Change Control
 
@@ -119,8 +117,11 @@ A new contributor should read this file first, followed by:
 2. [`PROJECT_VISION.md`](PROJECT_VISION.md)
 3. [`ARCHITECTURAL_PRINCIPLES.md`](ARCHITECTURAL_PRINCIPLES.md)
 4. [`ENGINEERING_PHILOSOPHY.md`](ENGINEERING_PHILOSOPHY.md)
-5. [`GLOSSARY.md`](GLOSSARY.md) as terminology is needed
-6. [`AI_ENGINEERING_GUIDE.md`](AI_ENGINEERING_GUIDE.md) before assigning or performing AI implementation work
-7. Only the architecture, system, tool, and ticket documents required for the assigned work
+5. [`DEVELOPMENT_ROADMAP.md`](DEVELOPMENT_ROADMAP.md) for project sequencing and current phase boundaries
+6. [`CODING_STANDARDS.md`](CODING_STANDARDS.md) before implementation work
+7. [`GLOSSARY.md`](GLOSSARY.md) as terminology is needed
+8. [`AI_ENGINEERING_GUIDE.md`](AI_ENGINEERING_GUIDE.md) before assigning or performing AI implementation work
+9. [`THIRD_PARTY_ASSETS.md`](THIRD_PARTY_ASSETS.md) before proposing or integrating an external dependency
+10. Only the architecture, system, tool, and ticket documents required for the assigned work
 
 This reading order provides shared purpose without unnecessarily expanding a contributor’s context window.
