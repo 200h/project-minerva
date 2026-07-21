@@ -1,4 +1,4 @@
-# <PREFIX-NNN>: <Ticket Title>
+# [PREFIX-NNN]: [Ticket Title]
 
 **Status:** Backlog  
 **Owner:** Unassigned  
