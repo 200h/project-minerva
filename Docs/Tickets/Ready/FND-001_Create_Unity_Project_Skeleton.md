@@ -224,19 +224,47 @@ When the repository already contains Unity project metadata, preserve it unless 
 
 ### Status
 
-Not started.
+Completed.
 
 ### Changed Files
 
-None.
+- `.gitignore` — added Unity-generated artifact exclusions.
+- `README.md` — renamed the existing root readme to the required casing and added project-opening guidance.
+- `Assets/Minerva/Content/Compiled/.gitkeep` — retained the compiled-content directory.
+- `Assets/Minerva/Content/Source/.gitkeep` — retained the source-content directory.
+- `Assets/Minerva/Editor/.gitkeep` — retained the editor directory.
+- `Assets/Minerva/Resources/.gitkeep` — retained the reserved resources directory.
+- `Assets/Minerva/Runtime/Application/.gitkeep` — retained the application runtime directory.
+- `Assets/Minerva/Runtime/Core/.gitkeep` — retained the core runtime directory.
+- `Assets/Minerva/Runtime/Phone/.gitkeep` — retained the phone runtime directory.
+- `Assets/Minerva/Runtime/Platform/.gitkeep` — retained the platform runtime directory.
+- `Assets/Minerva/Runtime/Presentation/.gitkeep` — retained the presentation runtime directory.
+- `Assets/Minerva/Runtime/Simulation/.gitkeep` — retained the simulation runtime directory.
+- `Assets/Minerva/Tests/Editor/.gitkeep` — retained the editor-test directory.
+- `Assets/Minerva/Tests/Runtime/.gitkeep` — retained the runtime-test directory.
+- `Docs/Tickets/Ready/FND-001_Create_Unity_Project_Skeleton.md` — recorded the implementation report.
 
 ### Work Completed
 
-None.
+- Read the ticket and all documents listed directly under Required Context.
+- Inspected only the repository root and the ticket-authorized Unity project paths.
+- Created exactly the twelve approved `Assets/Minerva/` leaf directories and retained each with a newline-only `.gitkeep` placeholder.
+- Added a Unity-focused `.gitignore` without excluding project source, documentation, settings, content, or placeholders.
+- Added the project name, Unity 5.6 engine target, Windows and iOS targets, opening instructions, `Minerva` namespace note, and Project Constitution link to the root `README.md`.
+- Added no gameplay code, packages, scenes, prefabs, assembly definitions, assets, or speculative architecture.
 
 ### Validation
 
-Not run.
+- Listed every changed path under Changed Files and confirmed each is authorized by FND-001.
+- Compared the created leaf-directory list with the twelve required paths; the lists matched exactly.
+- Listed every file under `Assets/Minerva/`; only the twelve `.gitkeep` placeholders exist.
+- Searched `Assets/Minerva/` for `.cs`, `.unity`, `.prefab`, `.asset`, and `.asmdef` files; no matches were found.
+- Searched `Assets/Minerva/Runtime/` for `UnityEditor`; no matches were found.
+- Ran `git check-ignore` for every placeholder, `README.md`, and `Docs/Project/README.md`; none are ignored.
+- Reviewed `.gitignore`; it excludes Unity caches, temporary files, logs, generated IDE files, diagnostics, and build outputs without excluding approved paths.
+- Checked every new or modified text file for a final newline; all passed.
+- Ran `git diff --check`; it passed.
+- Confirmed the installed editor is Unity 5.6.7f1, then opened an isolated copy of the project skeleton with `Unity -batchmode -nographics -quit`. Unity recognized the project, rebuilt the asset database, imported the skeleton, and exited successfully with code 0. The log contained no fatal, compiler, or import-failure matches.
 
 ### Deviations
 
@@ -244,12 +272,13 @@ None.
 
 ### Blockers or Risks
 
-None known before implementation.
+None.
 
 ### Optional Context Used
 
-None.
+- `Docs/Handbook/Git_Workflow.md` — used for the requested pull-request workflow.
+- `Docs/Handbook/Branch_Strategy.md` — used for the requested branch workflow.
 
 ### Follow-Up Suggestions
 
-None before implementation.
+None.
