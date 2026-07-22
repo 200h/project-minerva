@@ -1,7 +1,7 @@
 # FND-002: Create Runtime Bootstrap
 
-**Status:** Ready  
-**Owner:** Unassigned  
+**Status:** Active
+**Owner:** Codex
 **Created:** 2026-07-21  
 **Updated:** 2026-07-21  
 **Roadmap Phase:** Phase 1 — Foundation  
@@ -238,16 +238,52 @@ Tests should avoid depending on Unity scenes or editor APIs.
 
 ### Status
 
+Implementation complete; pull request publication pending.
+
 ### Changed Files
+
+- Created `Assets/Minerva/Runtime/Core/IRuntimeService.cs`.
+- Created `Assets/Minerva/Runtime/Core/ServiceInitializationResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeInitializationResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeLifecycleState.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeBootstrap.cs`.
+- Created `Assets/Minerva/Tests/Runtime/RuntimeBootstrapTests.cs`.
+- Deleted `Assets/Minerva/Runtime/Core/.gitkeep`.
+- Deleted `Assets/Minerva/Tests/Runtime/.gitkeep`.
+- Moved this ticket from `Docs/Tickets/Ready/` to `Docs/Tickets/Active/`.
 
 ### Work Completed
 
+- Added a small documented lifecycle contract for plain C# runtime services.
+- Added explicit service registration with reference-based duplicate rejection.
+- Added deterministic initialization, first-failure handling, diagnostic results, reverse shutdown, idempotent shutdown, and disposal.
+- Added focused NUnit tests for registration order, reported and thrown failures, duplicate registration, reverse shutdown, idempotent shutdown, single initialization, and repeated runtime construction and disposal.
+
 ### Validation
+
+- Focused runtime tests: not run because Unity and a standalone NUnit/C# test environment are unavailable.
+- Unity 5.6 batch import/compile: not run because no Unity executable is installed.
+- Prohibited runtime symbol search: passed; no `UnityEditor`, scene search, service-locator, reflection-discovery, or mutable static service collection implementation found.
+- Forbidden asset search: passed; no `.unity`, `.prefab`, `.asset`, or `.asmdef` file added.
+- Package/vendor scope check: passed; no package or vendor file changed.
+- Newline check: passed for all created text files and this ticket.
+- `git diff --check`: passed.
+- Workflow location check: passed; this ticket exists only in `Docs/Tickets/Active/` pending PR publication.
+- Authorized-path check: passed; all changes are within the ticket-authorized paths.
 
 ### Deviations
 
+None.
+
 ### Blockers or Risks
+
+- Runtime tests and Unity 5.6 import/compilation require validation in an environment with Unity 5.6 and its test runner.
+- GitHub CLI authentication is invalid and must be restored before the required pull request can be opened.
 
 ### Optional Context Used
 
+None.
+
 ### Follow-Up Suggestions
+
+- Run the focused runtime tests and Unity 5.6 batch import/compile in the project validation environment before merge.
