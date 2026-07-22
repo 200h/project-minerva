@@ -2,8 +2,8 @@
 
 **Status:** Ready  
 **Owner:** Unassigned  
-**Created:** 2026-07-22  
-**Updated:** 2026-07-22  
+**Created:** 2026-07-21  
+**Updated:** 2026-07-21  
 **Roadmap Phase:** Phase 1 — Foundation  
 **Related ADRs:** [`../../ADR/0001_Use_Unity_5_6.md`](../../ADR/0001_Use_Unity_5_6.md), [`../../ADR/0004_Ticket_Driven_AI_Implementation.md`](../../ADR/0004_Ticket_Driven_AI_Implementation.md)
 
