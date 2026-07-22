@@ -1,6 +1,6 @@
 # Milestones
 
-**Last Updated:** 2026-07-22  
+**Last Updated:** 2026-07-21  
 **Owner:** Product Owner and Technical Director
 
 ## Phase 0 — Preproduction
