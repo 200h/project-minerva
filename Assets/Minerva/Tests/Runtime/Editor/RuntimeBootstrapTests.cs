@@ -111,6 +111,87 @@ namespace Minerva.Tests.Runtime
         }
 
         [Test]
+        public void Shutdown_ReportsServiceException()
+        {
+            List<string> calls = new List<string>();
+            RuntimeBootstrap runtime = new RuntimeBootstrap();
+            runtime.Register(new ThrowingShutdownService("broken", calls));
+            runtime.Initialize();
+
+            RuntimeShutdownResult result = runtime.Shutdown();
+
+            Assert.IsFalse(result.IsSuccessful);
+            Assert.AreEqual(1, result.FailureCount);
+            Assert.AreEqual(typeof(ThrowingShutdownService), result.GetFailure(0).ServiceType);
+            Assert.AreEqual(typeof(InvalidOperationException), result.GetFailure(0).ExceptionType);
+            Assert.AreEqual("shutdown failure", result.GetFailure(0).FailureReason);
+            Assert.AreSame(result, runtime.ShutdownResult);
+            Assert.AreEqual(RuntimeLifecycleState.ShutdownFailed, runtime.State);
+        }
+
+        [Test]
+        public void Shutdown_ContinuesReverseOrderCleanupAfterException()
+        {
+            List<string> calls = new List<string>();
+            RuntimeBootstrap runtime = new RuntimeBootstrap();
+            runtime.Register(new RecordingService("first", calls));
+            runtime.Register(new ThrowingShutdownService("second", calls));
+            runtime.Register(new RecordingService("third", calls));
+            runtime.Initialize();
+
+            runtime.Shutdown();
+
+            CollectionAssert.AreEqual(
+                new string[]
+                {
+                    "initialize:first",
+                    "initialize:second",
+                    "initialize:third",
+                    "shutdown:third",
+                    "shutdown:second",
+                    "shutdown:first"
+                },
+                calls);
+        }
+
+        [Test]
+        public void Shutdown_AfterFailureIsIdempotent()
+        {
+            List<string> calls = new List<string>();
+            RuntimeBootstrap runtime = new RuntimeBootstrap();
+            runtime.Register(new ThrowingShutdownService("service", calls));
+            runtime.Initialize();
+
+            RuntimeShutdownResult firstResult = runtime.Shutdown();
+            RuntimeShutdownResult secondResult = runtime.Shutdown();
+
+            Assert.AreSame(firstResult, secondResult);
+            CollectionAssert.AreEqual(
+                new string[] { "initialize:service", "shutdown:service" },
+                calls);
+        }
+
+        [Test]
+        public void Dispose_AfterShutdownFailurePreservesResultWithoutRetryingService()
+        {
+            List<string> calls = new List<string>();
+            RuntimeBootstrap runtime = new RuntimeBootstrap();
+            runtime.Register(new ThrowingShutdownService("service", calls));
+            runtime.Initialize();
+            RuntimeShutdownResult result = runtime.Shutdown();
+
+            runtime.Dispose();
+            runtime.Dispose();
+
+            Assert.AreSame(result, runtime.ShutdownResult);
+            Assert.IsFalse(runtime.ShutdownResult.IsSuccessful);
+            Assert.AreEqual(RuntimeLifecycleState.Disposed, runtime.State);
+            CollectionAssert.AreEqual(
+                new string[] { "initialize:service", "shutdown:service" },
+                calls);
+        }
+
+        [Test]
         public void Initialize_RejectsSecondAttempt()
         {
             RuntimeBootstrap runtime = new RuntimeBootstrap();
@@ -206,6 +287,30 @@ namespace Minerva.Tests.Runtime
 
             public void Shutdown()
             {
+            }
+        }
+
+        private sealed class ThrowingShutdownService : IRuntimeService
+        {
+            private readonly string _name;
+            private readonly List<string> _calls;
+
+            public ThrowingShutdownService(string name, List<string> calls)
+            {
+                _name = name;
+                _calls = calls;
+            }
+
+            public ServiceInitializationResult Initialize()
+            {
+                _calls.Add("initialize:" + _name);
+                return ServiceInitializationResult.Success();
+            }
+
+            public void Shutdown()
+            {
+                _calls.Add("shutdown:" + _name);
+                throw new InvalidOperationException("shutdown failure");
             }
         }
     }

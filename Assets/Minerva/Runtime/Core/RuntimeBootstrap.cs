@@ -33,6 +33,11 @@ namespace Minerva.Core
         public RuntimeInitializationResult InitializationResult { get; private set; }
 
         /// <summary>
+        /// Gets the result of shutdown, when shutdown has occurred.
+        /// </summary>
+        public RuntimeShutdownResult ShutdownResult { get; private set; }
+
+        /// <summary>
         /// Registers a service at the end of the deterministic initialization order.
         /// </summary>
         public void Register(IRuntimeService service)
@@ -110,21 +115,40 @@ namespace Minerva.Core
         /// <summary>
         /// Shuts down successfully initialized services once, in reverse order.
         /// </summary>
-        public void Shutdown()
+        public RuntimeShutdownResult Shutdown()
         {
             if (State == RuntimeLifecycleState.Disposed ||
-                State == RuntimeLifecycleState.ShutDown)
+                State == RuntimeLifecycleState.ShutDown ||
+                State == RuntimeLifecycleState.ShutdownFailed)
             {
-                return;
+                return ShutdownResult;
             }
+
+            List<RuntimeShutdownFailure> failures = new List<RuntimeShutdownFailure>();
 
             for (int index = _initializedServices.Count - 1; index >= 0; index--)
             {
-                _initializedServices[index].Shutdown();
+                IRuntimeService service = _initializedServices[index];
+
+                try
+                {
+                    service.Shutdown();
+                }
+                catch (Exception exception)
+                {
+                    failures.Add(new RuntimeShutdownFailure(
+                        service.GetType(),
+                        exception.GetType(),
+                        exception.Message));
+                }
             }
 
             _initializedServices.Clear();
-            State = RuntimeLifecycleState.ShutDown;
+            ShutdownResult = new RuntimeShutdownResult(failures);
+            State = ShutdownResult.IsSuccessful
+                ? RuntimeLifecycleState.ShutDown
+                : RuntimeLifecycleState.ShutdownFailed;
+            return ShutdownResult;
         }
 
         /// <summary>

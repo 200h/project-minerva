@@ -3,7 +3,7 @@
 **Status:** Review
 **Owner:** Codex
 **Created:** 2026-07-21  
-**Updated:** 2026-07-21  
+**Updated:** 2026-07-22
 **Roadmap Phase:** Phase 1 — Foundation  
 **Related ADRs:** [`../../ADR/0001_Use_Unity_5_6.md`](../../ADR/0001_Use_Unity_5_6.md), [`../../ADR/0004_Ticket_Driven_AI_Implementation.md`](../../ADR/0004_Ticket_Driven_AI_Implementation.md)
 
@@ -247,7 +247,18 @@ Implementation complete; draft pull request #7 is open for review.
 - Created `Assets/Minerva/Runtime/Core/RuntimeInitializationResult.cs`.
 - Created `Assets/Minerva/Runtime/Core/RuntimeLifecycleState.cs`.
 - Created `Assets/Minerva/Runtime/Core/RuntimeBootstrap.cs`.
-- Created `Assets/Minerva/Tests/Runtime/RuntimeBootstrapTests.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeShutdownFailure.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeShutdownResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeService.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/ServiceInitializationResult.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeInitializationResult.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeLifecycleState.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeBootstrap.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeShutdownFailure.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeShutdownResult.cs.meta`.
+- Created `Assets/Minerva/Tests/Runtime/Editor.meta`.
+- Moved `Assets/Minerva/Tests/Runtime/RuntimeBootstrapTests.cs` to `Assets/Minerva/Tests/Runtime/Editor/RuntimeBootstrapTests.cs`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/RuntimeBootstrapTests.cs.meta`.
 - Deleted `Assets/Minerva/Runtime/Core/.gitkeep`.
 - Deleted `Assets/Minerva/Tests/Runtime/.gitkeep`.
 - Moved this ticket from `Docs/Tickets/Ready/` through `Docs/Tickets/Active/` to `Docs/Tickets/Review/`.
@@ -258,11 +269,16 @@ Implementation complete; draft pull request #7 is open for review.
 - Added explicit service registration with reference-based duplicate rejection.
 - Added deterministic initialization, first-failure handling, diagnostic results, reverse shutdown, idempotent shutdown, and disposal.
 - Added focused NUnit tests for registration order, reported and thrown failures, duplicate registration, reverse shutdown, idempotent shutdown, single initialization, and repeated runtime construction and disposal.
+- Moved the test fixture under the Runtime `Editor` folder so Unity 5.6 compiles and discovers it as an EditMode test assembly.
+- Made shutdown catch service exceptions, continue reverse-order cleanup, clear initialized-service bookkeeping, and expose service-specific failure diagnostics.
+- Added focused coverage for shutdown exceptions, continued reverse cleanup, repeated shutdown after failure, and disposal after shutdown failure.
+- Added stable Unity `.meta` files for every production script and the moved test asset.
 
 ### Validation
 
-- Focused runtime tests: not run because Unity and a standalone NUnit/C# test environment are unavailable.
-- Unity 5.6 batch import/compile: not run because no Unity executable is installed.
+- Unity 5.6.7f1 batch import/compile: passed with no compiler or import errors in an isolated temporary project containing the exact `Assets/Minerva` tree.
+- Unity 5.6 EditMode Test Runner: passed 12 of 12 tests with 37 assertions, 0 failures, 0 skipped, and 0 inconclusive tests.
+- Unity metadata stability check: passed; Unity 5.6 import did not rewrite the committed `.meta` files or GUIDs.
 - Prohibited runtime symbol search: passed; no `UnityEditor`, scene search, service-locator, reflection-discovery, or mutable static service collection implementation found.
 - Forbidden asset search: passed; no `.unity`, `.prefab`, `.asset`, or `.asmdef` file added.
 - Package/vendor scope check: passed; no package or vendor file changed.
@@ -277,8 +293,8 @@ None.
 
 ### Blockers or Risks
 
-- Runtime tests and Unity 5.6 import/compilation require validation in an environment with Unity 5.6 and its test runner.
-- Focused runtime tests and Unity 5.6 import/compilation remain unverified until run in the project validation environment.
+- The checkout has no `ProjectSettings` directory, so Unity validation used an isolated temporary Unity 5.6 project to avoid creating unauthorized repository files. The exact `Assets/Minerva` tree was imported, compiled, and tested there.
+- Unity 5.6 emitted legacy callback-unregistration and player-communicator assertions while exiting after the successful test result was saved; the process exited successfully and all tests passed.
 
 ### Optional Context Used
 
@@ -286,4 +302,4 @@ None.
 
 ### Follow-Up Suggestions
 
-- Run the focused runtime tests and Unity 5.6 batch import/compile in the project validation environment before merge.
+None.

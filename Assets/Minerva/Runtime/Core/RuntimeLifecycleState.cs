@@ -10,6 +10,7 @@ namespace Minerva.Core
         Running,
         InitializationFailed,
         ShutDown,
+        ShutdownFailed,
         Disposed
     }
 }
