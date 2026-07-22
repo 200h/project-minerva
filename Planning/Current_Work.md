@@ -1,38 +1,46 @@
 # Current Work
 
-**Last Updated:** 2026-07-21  
+**Last Updated:** 2026-07-22  
 **Owner:** Technical Director
 
 ## Active Milestone
 
-**M0.4 — Implementation Readiness**
+**M1.2 — Runtime Bootstrap**
 
 ## Active Branch
 
-`tickets/fnd-001-unity-project-skeleton`
+`docs/fnd-001-closeout-and-fnd-002`
 
 ## Current Scope
 
-- Prepare and review the first Codex implementation ticket.
-- Define the authorized Unity repository skeleton.
-- Confirm Unity 5.6 repository constraints.
-- Establish exact validation and stop conditions for foundation implementation.
-- Keep implementation blocked until the Ready ticket is approved and merged.
+- Close out FND-001 after accepted implementation through PR #5.
+- Correct ticket lifecycle categorization and status metadata.
+- Strengthen workflow ownership for `Ready`, `Active`, `Review`, and `Complete` transitions.
+- Prepare and review FND-002 for the deterministic runtime bootstrap.
+- Keep FND-002 implementation blocked until its Ready ticket is approved and merged.
 
 ## Explicitly Not Active
 
-- Unity repository skeleton implementation
-- Gameplay runtime code
+- FND-002 runtime implementation
+- Event Bus implementation
+- Time and Clock implementation
+- Save/Load implementation
+- World State implementation
+- Narrative Runtime implementation
+- Phone applications or UI navigation
 - Story Timeline implementation
 - Game Director implementation
-- Core system implementation
-- Third-party asset installation
+- Third-party dependencies
 - Assembly-definition design
+
+## Completed Ticket
+
+- `Docs/Tickets/Complete/FND-001_Create_Unity_Project_Skeleton.md`
 
 ## Current Ready Ticket
 
-- `Docs/Tickets/Ready/FND-001_Create_Unity_Project_Skeleton.md`
+- `Docs/Tickets/Ready/FND-002_Create_Runtime_Bootstrap.md`
 
 ## Next Approved Planning Step
 
-After `FND-001` is reviewed and merged into `main`, assign the ticket to Codex on a dedicated implementation branch and require the ticket-defined implementation report and validation evidence.
+After this documentation PR is reviewed and merged, assign `FND-002` to Codex on a dedicated implementation branch. Codex must move the ticket to `Active` when work begins and to `Review` when the implementation pull request opens. The Technical Director performs the post-merge move to `Complete`.
