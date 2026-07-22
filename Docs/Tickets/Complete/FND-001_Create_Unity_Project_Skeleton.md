@@ -1,11 +1,12 @@
 # FND-001: Create Unity Project Skeleton
 
-**Status:** Ready  
-**Owner:** Unassigned  
+**Status:** Complete  
+**Owner:** Codex  
 **Created:** 2026-07-21  
 **Updated:** 2026-07-21  
 **Roadmap Phase:** Phase 1 — Foundation  
-**Related ADRs:** [`../../ADR/0001_Use_Unity_5_6.md`](../../ADR/0001_Use_Unity_5_6.md), [`../../ADR/0004_Ticket_Driven_AI_Implementation.md`](../../ADR/0004_Ticket_Driven_AI_Implementation.md)
+**Related ADRs:** [`../../ADR/0001_Use_Unity_5_6.md`](../../ADR/0001_Use_Unity_5_6.md), [`../../ADR/0004_Ticket_Driven_AI_Implementation.md`](../../ADR/0004_Ticket_Driven_AI_Implementation.md)  
+**Implemented By:** PR #5 — `FND-001: create Unity project skeleton`
 
 ## Summary
 
@@ -17,9 +18,7 @@ This ticket establishes the physical folder boundaries required by the approved 
 
 Project Minerva Constitution v1.0, the Phase 0 workflow foundation, and the M0.3 Architecture Baseline are merged into `main`.
 
-The repository currently contains documentation and planning artifacts but does not yet contain the Unity project structure described in `Docs/Architecture/REPOSITORY_STRUCTURE.md`.
-
-The first implementation step must create only the approved skeleton and repository-support files. It must not add speculative systems, managers, packages, or abstractions.
+The first implementation step creates only the approved skeleton and repository-support files. It does not add speculative systems, managers, packages, or abstractions.
 
 ## Goal
 
@@ -128,7 +127,7 @@ Do not perform repository-wide architecture discovery beyond these areas and Req
 - `Assets/Minerva/**`
 - `ProjectSettings/**` only when required to establish a valid Unity 5.6 project skeleton
 - `Packages/**` only when already required by the checked-in Unity project; do not introduce package-manager dependencies
-- `Docs/Tickets/Ready/FND-001_Create_Unity_Project_Skeleton.md` only for the implementation report and status movement performed by the approved workflow
+- This ticket only for its implementation report and workflow status movement
 
 ## Prohibited Files or Systems
 
@@ -189,17 +188,17 @@ When the repository already contains Unity project metadata, preserve it unless 
 
 ## Acceptance Criteria
 
-- [ ] Every approved `Assets/Minerva/` directory exists and is retained by Git.
-- [ ] No unapproved directory is added under `Assets/Minerva/`.
-- [ ] No C# source, scene, prefab, ScriptableObject, or gameplay asset is added.
-- [ ] `.gitignore` excludes standard Unity-generated caches, temporary files, logs, and build outputs.
-- [ ] `.gitignore` does not exclude approved source, documentation, project settings, or content paths.
-- [ ] Root `README.md` identifies Unity 5.6, Windows, iOS, the `Minerva` namespace root, and links to the Project Constitution.
-- [ ] Runtime paths contain no `UnityEditor` references.
-- [ ] No third-party package or dependency is added.
-- [ ] No assembly-definition file is added.
-- [ ] The final diff contains only authorized files and directories.
-- [ ] The implementation report accurately records all changes and validation.
+- [x] Every approved `Assets/Minerva/` directory exists and is retained by Git.
+- [x] No unapproved directory is added under `Assets/Minerva/`.
+- [x] No C# source, scene, prefab, ScriptableObject, or gameplay asset is added.
+- [x] `.gitignore` excludes standard Unity-generated caches, temporary files, logs, and build outputs.
+- [x] `.gitignore` does not exclude approved source, documentation, project settings, or content paths.
+- [x] Root `README.md` identifies Unity 5.6, Windows, iOS, the `Minerva` namespace root, and links to the Project Constitution.
+- [x] Runtime paths contain no `UnityEditor` references.
+- [x] No third-party package or dependency is added.
+- [x] No assembly-definition file is added.
+- [x] The final diff contains only authorized files and directories.
+- [x] The implementation report accurately records all changes and validation.
 
 ## Required Validation
 
@@ -214,17 +213,17 @@ When the repository already contains Unity project metadata, preserve it unless 
 
 ## Definition of Done
 
-- [ ] Acceptance criteria satisfied.
-- [ ] Required validation reported accurately.
-- [ ] Documentation updated.
-- [ ] No unauthorized changes.
-- [ ] Implementation report completed.
+- [x] Acceptance criteria satisfied.
+- [x] Required validation reported accurately.
+- [x] Documentation updated.
+- [x] No unauthorized changes.
+- [x] Implementation report completed.
 
 ## Implementation Report
 
 ### Status
 
-Completed.
+Completed and accepted through merged PR #5.
 
 ### Changed Files
 
@@ -242,7 +241,7 @@ Completed.
 - `Assets/Minerva/Runtime/Simulation/.gitkeep` — retained the simulation runtime directory.
 - `Assets/Minerva/Tests/Editor/.gitkeep` — retained the editor-test directory.
 - `Assets/Minerva/Tests/Runtime/.gitkeep` — retained the runtime-test directory.
-- `Docs/Tickets/Ready/FND-001_Create_Unity_Project_Skeleton.md` — recorded the implementation report.
+- This ticket — recorded implementation and closeout results.
 
 ### Work Completed
 
@@ -264,7 +263,7 @@ Completed.
 - Reviewed `.gitignore`; it excludes Unity caches, temporary files, logs, generated IDE files, diagnostics, and build outputs without excluding approved paths.
 - Checked every new or modified text file for a final newline; all passed.
 - Ran `git diff --check`; it passed.
-- Confirmed the installed editor is Unity 5.6.7f1, then opened an isolated copy of the project skeleton with `Unity -batchmode -nographics -quit`. Unity recognized the project, rebuilt the asset database, imported the skeleton, and exited successfully with code 0. The log contained no fatal, compiler, or import-failure matches.
+- Confirmed Unity 5.6.7f1 recognized and imported an isolated project copy in batch mode, exited with code 0, and produced no fatal, compiler, or import-failure matches.
 
 ### Deviations
 
@@ -276,9 +275,9 @@ None.
 
 ### Optional Context Used
 
-- `Docs/Handbook/Git_Workflow.md` — used for the requested pull-request workflow.
-- `Docs/Handbook/Branch_Strategy.md` — used for the requested branch workflow.
+- `Docs/Handbook/Git_Workflow.md`
+- `Docs/Handbook/Branch_Strategy.md`
 
 ### Follow-Up Suggestions
 
-None.
+Proceed to the next approved Phase 1 foundation ticket.
