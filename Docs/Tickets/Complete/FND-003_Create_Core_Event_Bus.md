@@ -1,7 +1,7 @@
 # FND-003: Create Core Event Bus
 
-**Status:** Ready  
-**Owner:** Unassigned  
+**Status:** Complete
+**Owner:** Codex
 **Created:** 2026-07-23  
 **Updated:** 2026-07-23  
 **Roadmap Phase:** Phase 1 — Foundation  
@@ -199,22 +199,22 @@ The bus may implement `IRuntimeService` when that produces a clean explicit life
 
 ## Acceptance Criteria
 
-- [ ] Generic event contracts are reusable by later domain-specific classes without modification.
-- [ ] Subscriptions and publications are strongly typed and exact-type only.
-- [ ] Registration order determines invocation order for the same event type.
-- [ ] Subscription handles are explicit, disposable, and idempotent.
-- [ ] Unsubscription and subscription during dispatch follow the required semantics.
-- [ ] Nested publications are queued FIFO without direct recursive dispatch.
-- [ ] Subscriber exceptions do not prevent remaining eligible delivery.
-- [ ] Diagnostics identify the event type and failed subscriber sufficiently for testing and debugging.
-- [ ] Publishing with no subscribers returns a clear empty success result.
-- [ ] Cleanup/disposal is idempotent; post-disposal subscription and publication are rejected.
-- [ ] Separate bus instances can be repeatedly constructed and disposed without static-state leakage.
-- [ ] No `UnityEditor`, scene search, singleton, global accessor, service locator, reflection discovery, or mutable static subscriber registry is introduced.
-- [ ] No domain-specific or future-system behavior is added.
-- [ ] Focused tests cover all required behavior.
-- [ ] The final diff contains only authorized paths.
-- [ ] The Implementation Report records changes and validation accurately.
+- [x] Generic event contracts are reusable by later domain-specific classes without modification.
+- [x] Subscriptions and publications are strongly typed and exact-type only.
+- [x] Registration order determines invocation order for the same event type.
+- [x] Subscription handles are explicit, disposable, and idempotent.
+- [x] Unsubscription and subscription during dispatch follow the required semantics.
+- [x] Nested publications are queued FIFO without direct recursive dispatch.
+- [x] Subscriber exceptions do not prevent remaining eligible delivery.
+- [x] Diagnostics identify the event type and failed subscriber sufficiently for testing and debugging.
+- [x] Publishing with no subscribers returns a clear empty success result.
+- [x] Cleanup/disposal is idempotent; post-disposal subscription and publication are rejected.
+- [x] Separate bus instances can be repeatedly constructed and disposed without static-state leakage.
+- [x] No `UnityEditor`, scene search, singleton, global accessor, service locator, reflection discovery, or mutable static subscriber registry is introduced.
+- [x] No domain-specific or future-system behavior is added.
+- [x] Focused tests cover all required behavior.
+- [x] The final diff contains only authorized paths.
+- [x] The Implementation Report records changes and validation accurately.
 
 ## Required Validation
 
@@ -231,49 +231,107 @@ The bus may implement `IRuntimeService` when that produces a clean explicit life
 
 ## Definition of Done
 
-- [ ] Acceptance criteria satisfied.
-- [ ] Required validation reported accurately.
-- [ ] Documentation updated.
-- [ ] No unauthorized changes.
-- [ ] Implementation Report completed.
-- [ ] Independent Review record completed by the IRA.
-- [ ] Technical Director Acceptance completed before merge.
+- [x] Acceptance criteria satisfied.
+- [x] Required validation reported accurately.
+- [x] Documentation updated.
+- [x] No unauthorized changes.
+- [x] Implementation Report completed.
+- [x] Independent Review record completed by the IRA.
+- [x] Technical Director Acceptance completed before merge.
 
 ## Implementation Report
 
 ### Status
 
+Implementation and independent review are complete; pull request #10 is accepted and ready for repository-owner merge.
+
 ### Changed Files
+
+- Created `Assets/Minerva/Runtime/Core/IEvent.cs`.
+- Created `Assets/Minerva/Runtime/Core/IEvent.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/IEventPublisher.cs`.
+- Created `Assets/Minerva/Runtime/Core/IEventPublisher.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/IEventSubscriber.cs`.
+- Created `Assets/Minerva/Runtime/Core/IEventSubscriber.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/IEventBus.cs`.
+- Created `Assets/Minerva/Runtime/Core/IEventBus.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/EventPublicationResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/EventPublicationResult.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/EventSubscriberFailure.cs`.
+- Created `Assets/Minerva/Runtime/Core/EventSubscriberFailure.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/InMemoryEventBus.cs`.
+- Created `Assets/Minerva/Runtime/Core/InMemoryEventBus.cs.meta`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/InMemoryEventBusTests.cs`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/InMemoryEventBusTests.cs.meta`.
+- Moved this ticket from `Docs/Tickets/Ready/` through `Docs/Tickets/Active/` and `Docs/Tickets/Review/` to `Docs/Tickets/Complete/`.
 
 ### Work Completed
 
+- Added small documented marker, publisher, subscriber, and combined event-bus contracts.
+- Added deterministic exact-type dispatch in registration order with explicit idempotent subscription handles.
+- Added snapshot-based dispatch semantics so removal before a handler's turn prevents delivery and additions during dispatch begin with the next event.
+- Added FIFO queued nested publication without recursive dispatch, including completion results for nested publications.
+- Added isolated per-subscriber exception handling with event type, subscriber type and method, exception type, and failure-reason diagnostics.
+- Added clear empty publication results, null rejection, idempotent bus disposal, post-disposal rejection, and instance-owned state.
+- Added focused tests for exact-type dispatch, ordering, null inputs, mutation during dispatch, nested FIFO delivery, stack-safe nested publication, failure isolation, empty publication, disposal, and repeated independent instances.
+
 ### Validation
+
+- Unity 5.6.7f1 batch import/compile: passed with no compiler or import errors in an isolated temporary project containing the exact `Assets/Minerva` tree.
+- Unity 5.6 EditMode Test Runner: passed 28 of 28 runtime tests with 75 assertions, 0 failures, 0 skipped, and 0 inconclusive tests; the event-bus fixture contributed 16 passing tests.
+- Unity metadata stability check: passed; Unity 5.6 import did not rewrite the new `.meta` files or GUIDs.
+- Prohibited runtime symbol search: passed; no `UnityEditor`, scene search, service locator, reflection discovery, wildcard dispatch, or mutable static subscriber collection implementation found.
+- Domain-event boundary search: passed; no domain-specific event or speculative metadata implementation found.
+- Forbidden asset search: passed; no `.unity`, `.prefab`, `.asset`, `.asmdef`, package, or vendor file was added.
+- Newline check: passed for every created text file and this ticket.
+- `git diff --check`: passed.
+- Workflow location check: passed; this ticket exists only in `Docs/Tickets/Complete/` with matching `Status`.
+- Authorized-path check: passed; all changes are within ticket-authorized paths.
 
 ### Deviations
 
+None.
+
 ### Blockers or Risks
+
+- Unity 5.6 emitted legacy shader-compiler socket warnings and shutdown callback/player-communicator assertions while running tests; the saved test result and process exit both reported success.
 
 ### Optional Context Used
 
+- `Docs/Handbook/Git_Workflow.md` and `Docs/Handbook/Branch_Strategy.md` for the required branch and pull-request workflow.
+- The validation section of `Docs/Tickets/Complete/FND-002_Create_Runtime_Bootstrap.md` to confirm the established isolated Unity 5.6 validation approach.
+
 ### Follow-Up Suggestions
+
+None.
 
 ## Implementation Review Agent Record
 
-Completed by the independent reviewer while the ticket is in `Review`.
+Completed by the independent reviewer while the ticket was in `Review`.
 
 ### Reviewer
 
+Implementation Review Agent
+
 ### Reviewed PR and Head
+
+PR #10 at head `76706cafc1498db5b82f6cce20ac5bbb4a5e4e63`.
 
 ### Scope and Acceptance Findings
 
+The implementation remained within the authorized Core runtime, runtime-test, and ticket paths. The generic event contracts, deterministic exact-type dispatch, mutation behavior, FIFO nested publication, failure isolation, diagnostics, cleanup, and instance isolation satisfy the ticket's acceptance criteria. No domain-specific or speculative future-system behavior was introduced.
+
 ### Validation Assessment
+
+The reported Unity 5.6 batch compile and EditMode suite passed. All 28 tests and 75 assertions passed, including 16 event-bus tests. Prohibited-symbol, domain-boundary, forbidden-asset, newline, metadata-stability, authorized-path, workflow-location, and `git diff --check` validations passed.
 
 ### Blocking Findings
 
+None.
+
 ### Recommendation
 
-`Accept`, `Changes Required`, or `Blocked`.
+Accept.
 
 ## Technical Director Acceptance
 
@@ -281,20 +339,27 @@ Completed after reviewing the IRA recommendation and before merge.
 
 ### Decision
 
-`Accepted`, `Changes Required`, or `Blocked`.
+Accepted.
 
 ### PR Reference
 
+PR #10.
+
 ### Acceptance Date
 
-Use `YYYY-MM-DD` in `America/New_York`.
+2026-07-23.
 
 ### Final Validation Decision
 
+The IRA review and reported validation evidence are sufficient. FND-003 is accepted and ready for repository-owner merge.
+
 ### Accepted Deviations
+
+None.
 
 ### Follow-Up Tickets
 
+None.
 ## Execution State Log
 
 Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
@@ -302,6 +367,6 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 | State | Timestamp | Actor | Evidence or Notes |
 |---|---|---|---|
 | Planned |  |  |  |
-| In Progress |  |  |  |
-| Committed |  |  |  |
-| Verified |  |  |  |
+| In Progress | 2026-07-23 16:45 EDT | Codex | Created `agent/fnd-003-core-event-bus` from current `main`; implementation started. |
+| Committed | 2026-07-23 16:54 EDT | Codex | Commit `9971b6988e3e3b8a876c74fb340ac08a5fe0439a` contains the validated implementation. |
+| Verified | 2026-07-23 16:55 EDT | Codex | Draft PR #10 opened against `main` from `agent/fnd-003-core-event-bus`; head matched commit `9971b6988e3e3b8a876c74fb340ac08a5fe0439a`. |
