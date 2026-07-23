@@ -1,7 +1,7 @@
 # FND-003: Create Core Event Bus
 
-**Status:** Ready  
-**Owner:** Unassigned  
+**Status:** Active
+**Owner:** Codex
 **Created:** 2026-07-23  
 **Updated:** 2026-07-23  
 **Roadmap Phase:** Phase 1 — Foundation  
@@ -243,19 +243,67 @@ The bus may implement `IRuntimeService` when that produces a clean explicit life
 
 ### Status
 
+Implementation complete and validated; draft pull request pending.
+
 ### Changed Files
+
+- Created `Assets/Minerva/Runtime/Core/IEvent.cs`.
+- Created `Assets/Minerva/Runtime/Core/IEvent.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/IEventPublisher.cs`.
+- Created `Assets/Minerva/Runtime/Core/IEventPublisher.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/IEventSubscriber.cs`.
+- Created `Assets/Minerva/Runtime/Core/IEventSubscriber.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/IEventBus.cs`.
+- Created `Assets/Minerva/Runtime/Core/IEventBus.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/EventPublicationResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/EventPublicationResult.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/EventSubscriberFailure.cs`.
+- Created `Assets/Minerva/Runtime/Core/EventSubscriberFailure.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/InMemoryEventBus.cs`.
+- Created `Assets/Minerva/Runtime/Core/InMemoryEventBus.cs.meta`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/InMemoryEventBusTests.cs`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/InMemoryEventBusTests.cs.meta`.
+- Moved this ticket from `Docs/Tickets/Ready/` to `Docs/Tickets/Active/`.
 
 ### Work Completed
 
+- Added small documented marker, publisher, subscriber, and combined event-bus contracts.
+- Added deterministic exact-type dispatch in registration order with explicit idempotent subscription handles.
+- Added snapshot-based dispatch semantics so removal before a handler's turn prevents delivery and additions during dispatch begin with the next event.
+- Added FIFO queued nested publication without recursive dispatch, including completion results for nested publications.
+- Added isolated per-subscriber exception handling with event type, subscriber type and method, exception type, and failure-reason diagnostics.
+- Added clear empty publication results, null rejection, idempotent bus disposal, post-disposal rejection, and instance-owned state.
+- Added focused tests for exact-type dispatch, ordering, null inputs, mutation during dispatch, nested FIFO delivery, stack-safe nested publication, failure isolation, empty publication, disposal, and repeated independent instances.
+
 ### Validation
+
+- Unity 5.6.7f1 batch import/compile: passed with no compiler or import errors in an isolated temporary project containing the exact `Assets/Minerva` tree.
+- Unity 5.6 EditMode Test Runner: passed 28 of 28 runtime tests with 75 assertions, 0 failures, 0 skipped, and 0 inconclusive tests; the event-bus fixture contributed 16 passing tests.
+- Unity metadata stability check: passed; Unity 5.6 import did not rewrite the new `.meta` files or GUIDs.
+- Prohibited runtime symbol search: passed; no `UnityEditor`, scene search, service locator, reflection discovery, wildcard dispatch, or mutable static subscriber collection implementation found.
+- Domain-event boundary search: passed; no domain-specific event or speculative metadata implementation found.
+- Forbidden asset search: passed; no `.unity`, `.prefab`, `.asset`, `.asmdef`, package, or vendor file was added.
+- Newline check: passed for every created text file and this ticket.
+- `git diff --check`: passed.
+- Workflow location check: passed; this ticket exists only in `Docs/Tickets/Active/` with matching `Status`.
+- Authorized-path check: passed; all changes are within ticket-authorized paths.
 
 ### Deviations
 
+None.
+
 ### Blockers or Risks
+
+- Unity 5.6 emitted legacy shader-compiler socket warnings and shutdown callback/player-communicator assertions while running tests; the saved test result and process exit both reported success.
 
 ### Optional Context Used
 
+- `Docs/Handbook/Git_Workflow.md` and `Docs/Handbook/Branch_Strategy.md` for the required branch and pull-request workflow.
+- The validation section of `Docs/Tickets/Complete/FND-002_Create_Runtime_Bootstrap.md` to confirm the established isolated Unity 5.6 validation approach.
+
 ### Follow-Up Suggestions
+
+None.
 
 ## Implementation Review Agent Record
 
@@ -302,6 +350,6 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 | State | Timestamp | Actor | Evidence or Notes |
 |---|---|---|---|
 | Planned |  |  |  |
-| In Progress |  |  |  |
+| In Progress | 2026-07-23 16:45 EDT | Codex | Created `agent/fnd-003-core-event-bus` from current `main`; implementation started. |
 | Committed |  |  |  |
 | Verified |  |  |  |
