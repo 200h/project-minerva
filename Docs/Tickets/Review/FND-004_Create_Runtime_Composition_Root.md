@@ -1,6 +1,6 @@
 # FND-004: Create Runtime Composition Root
 
-**Status:** Active
+**Status:** Review
 **Owner:** Codex
 **Created:** 2026-07-23  
 **Updated:** 2026-07-23  
@@ -274,31 +274,31 @@ Do not anticipate FND-005 clock composition. FND-005 will extend the accepted co
 
 ## Acceptance Criteria
 
-- [ ] One explicit composition root creates the approved foundation runtime instance.
-- [ ] Each composition attempt creates a fresh `RuntimeBootstrap` and fresh `InMemoryEventBus` with no shared mutable runtime state.
-- [ ] Successful composition initializes registered services once in documented deterministic order.
-- [ ] Successful composition returns one usable runtime lifetime handle and no startup failure.
-- [ ] The successful runtime exposes event publishing and subscription through `IEventPublisher` and `IEventSubscriber` or an equally narrow accepted interface boundary.
-- [ ] Ordinary consumers cannot access arbitrary services through type, key, string, generic lookup, collection enumeration, or mutable registry.
-- [ ] The successful runtime does not expose post-start service registration.
-- [ ] Disposing the successful runtime shuts down initialized services in reverse order and disposes the event bus exactly once.
-- [ ] Repeated disposal of the successful runtime is safe and does not repeat owned cleanup.
-- [ ] Event publication and subscription reject new work after the composed runtime is disposed, consistent with accepted event-bus behavior.
-- [ ] Reported, null-result, and thrown initialization failures produce no usable runtime handle.
-- [ ] Startup failure preserves the original failed service type and failure reason from `RuntimeInitializationResult`.
-- [ ] Startup failure immediately cleans up every successfully initialized or composition-owned resource before returning.
-- [ ] Cleanup failures during failed startup remain inspectable without erasing the original initialization failure.
-- [ ] Separate runtimes can be composed, used, and disposed repeatedly without shared subscriptions or leaked static state.
-- [ ] Existing FND-002 and FND-003 tests continue to pass unchanged unless a stop condition is raised.
-- [ ] Runtime implementation contains no `UnityEditor` reference.
-- [ ] No scene search, hidden singleton, global registry, service locator, dependency-injection container, or reflection discovery is introduced.
-- [ ] No domain-specific or later-foundation behavior is added.
-- [ ] Focused tests cover success, capability exposure, ordering, ownership, failure cleanup, cleanup failure reporting, idempotent disposal, and runtime-instance isolation.
-- [ ] Every new Unity asset has a stable `.meta` file.
-- [ ] The final diff contains only authorized paths.
-- [ ] The implementation report accurately records changes, design choices, optional context, and validation.
-- [ ] The ticket directory and `Status` metadata match throughout implementation.
-- [ ] The implementation pull request contains this ticket under `Docs/Tickets/Review/` while independent review is pending.
+- [x] One explicit composition root creates the approved foundation runtime instance.
+- [x] Each composition attempt creates a fresh `RuntimeBootstrap` and fresh `InMemoryEventBus` with no shared mutable runtime state.
+- [x] Successful composition initializes registered services once in documented deterministic order.
+- [x] Successful composition returns one usable runtime lifetime handle and no startup failure.
+- [x] The successful runtime exposes event publishing and subscription through `IEventPublisher` and `IEventSubscriber` or an equally narrow accepted interface boundary.
+- [x] Ordinary consumers cannot access arbitrary services through type, key, string, generic lookup, collection enumeration, or mutable registry.
+- [x] The successful runtime does not expose post-start service registration.
+- [x] Disposing the successful runtime shuts down initialized services in reverse order and disposes the event bus exactly once.
+- [x] Repeated disposal of the successful runtime is safe and does not repeat owned cleanup.
+- [x] Event publication and subscription reject new work after the composed runtime is disposed, consistent with accepted event-bus behavior.
+- [x] Reported, null-result, and thrown initialization failures produce no usable runtime handle.
+- [x] Startup failure preserves the original failed service type and failure reason from `RuntimeInitializationResult`.
+- [x] Startup failure immediately cleans up every successfully initialized or composition-owned resource before returning.
+- [x] Cleanup failures during failed startup remain inspectable without erasing the original initialization failure.
+- [x] Separate runtimes can be composed, used, and disposed repeatedly without shared subscriptions or leaked static state.
+- [x] Existing FND-002 and FND-003 tests continue to pass unchanged unless a stop condition is raised.
+- [x] Runtime implementation contains no `UnityEditor` reference.
+- [x] No scene search, hidden singleton, global registry, service locator, dependency-injection container, or reflection discovery is introduced.
+- [x] No domain-specific or later-foundation behavior is added.
+- [x] Focused tests cover success, capability exposure, ordering, ownership, failure cleanup, cleanup failure reporting, idempotent disposal, and runtime-instance isolation.
+- [x] Every new Unity asset has a stable `.meta` file.
+- [x] The final diff contains only authorized paths.
+- [x] The implementation report accurately records changes, design choices, optional context, and validation.
+- [x] The ticket directory and `Status` metadata match throughout implementation.
+- [x] The implementation pull request contains this ticket under `Docs/Tickets/Review/` while independent review is pending.
 - [ ] After acceptance, the implementation pull request contains this ticket under `Docs/Tickets/Complete/` before merge.
 
 ## Required Validation
@@ -337,17 +337,18 @@ Stop and report rather than guessing when:
 ## Definition of Done
 
 - [ ] Acceptance criteria satisfied.
-- [ ] Required validation reported accurately.
-- [ ] Documentation updated.
-- [ ] No unauthorized changes.
-- [ ] Implementation report completed.
-- [ ] Ticket exists only in `Docs/Tickets/Review/` when implementation review begins.
+- [x] Required validation reported accurately.
+- [x] Documentation updated.
+- [x] No unauthorized changes.
+- [x] Implementation report completed.
+- [x] Ticket exists only in `Docs/Tickets/Review/` when implementation review begins.
 
 ## Implementation Report
 
 ### Status
 
-Implementation and validation are complete; the pull request is pending.
+Implementation and validation are complete; draft pull request #12 is open
+against `main` and awaiting independent review.
 
 ### Changed Files
 
@@ -359,7 +360,8 @@ Implementation and validation are complete; the pull request is pending.
 - Created `Assets/Minerva/Runtime/Core/RuntimeCompositionResult.cs.meta`.
 - Created `Assets/Minerva/Tests/Runtime/Editor/RuntimeCompositionRootTests.cs`.
 - Created `Assets/Minerva/Tests/Runtime/Editor/RuntimeCompositionRootTests.cs.meta`.
-- Moved this ticket from `Docs/Tickets/Ready/` to `Docs/Tickets/Active/`.
+- Moved this ticket from `Docs/Tickets/Ready/` through
+  `Docs/Tickets/Active/` to `Docs/Tickets/Review/`.
 
 ### Work Completed
 
@@ -428,8 +430,8 @@ Implementation and validation are complete; the pull request is pending.
   `.asset`, `.asmdef`, package, vendor, or third-party file was added.
 - Newline check: passed for every created text file and this ticket.
 - `git diff --check`: passed.
-- Workflow location check: passed for the current phase; this ticket exists only
-  in `Docs/Tickets/Active/` with matching `Status`.
+- Workflow location check: passed; this ticket exists only in
+  `Docs/Tickets/Review/` with matching `Status`.
 - Authorized-path check: passed; every change is within the ticket-authorized
   Core runtime, runtime test, or ticket path.
 - Linked epic check: passed against `main`; the epic exists and identifies
@@ -502,5 +504,5 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 |---|---|---|---|
 | Planned | 2026-07-23 17:30 EDT | Technical Director | Readiness pass completed against accepted FND-002 and FND-003 contracts; ticket promoted to Ready in documentation PR. |
 | In Progress | 2026-07-23 17:31 EDT | Codex | Began implementation on `agent/fnd-004-runtime-composition-root` from `main` at merged PR #11 (`867dcb3`). |
-| Committed |  |  |  |
-| Verified |  |  |  |
+| Committed | 2026-07-23 17:39 EDT | Codex | Commit `36ca334f4eca645bac244cae65fdad298c9ab265` contains the validated implementation. |
+| Verified | 2026-07-23 17:40 EDT | Codex | Draft PR #12 opened against `main`; base is merged PR #11 (`867dcb3`) and the implementation head is `36ca334`. |
