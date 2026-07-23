@@ -26,8 +26,8 @@ It does not own narrative rules, phone applications, UI navigation, authored con
 
 ## Progress
 
-**Progress:** 2 Complete · 1 Ready · 5 Backlog  
-**Current Execution Ticket:** FND-003  
+**Progress:** 3 Complete · 1 Ready · 4 Backlog  
+**Current Execution Ticket:** FND-004  
 **Last Updated:** 2026-07-23  
 
 ## Included Tickets
@@ -36,10 +36,10 @@ Ticket directories and ticket metadata are authoritative. This table is a synchr
 
 | Ticket | Title | Status | Created | Last Updated | Depends On |
 |---|---|---|---|---|---|
-| [FND-001](../../Docs/Tickets/Complete/FND-001_Create_Unity_Project_Skeleton.md) | Create Unity Project Skeleton | Complete | 2026-07-21 | 2026-07-21 | — |
-| [FND-002](../../Docs/Tickets/Complete/FND-002_Create_Runtime_Bootstrap.md) | Create Runtime Bootstrap | Complete | 2026-07-21 | 2026-07-21 | FND-001 |
-| [FND-003](../../Docs/Tickets/Ready/FND-003_Create_Core_Event_Bus.md) | Create Core Event Bus | Ready | 2026-07-23 | 2026-07-23 | FND-002 |
-| [FND-004](../../Docs/Tickets/Backlog/FND-004_Create_Runtime_Composition_Root.md) | Create Runtime Composition Root | Backlog | 2026-07-23 | 2026-07-23 | FND-003 |
+| [FND-001](../../Docs/Tickets/Complete/FND-001_Create_Unity_Project_Skeleton.md) | Create Unity Project Skeleton | Complete | 2026-07-21 | 2026-07-23 | — |
+| [FND-002](../../Docs/Tickets/Complete/FND-002_Create_Runtime_Bootstrap.md) | Create Runtime Bootstrap | Complete | 2026-07-21 | 2026-07-23 | FND-001 |
+| [FND-003](../../Docs/Tickets/Complete/FND-003_Create_Core_Event_Bus.md) | Create Core Event Bus | Complete | 2026-07-23 | 2026-07-23 | FND-002 |
+| [FND-004](../../Docs/Tickets/Ready/FND-004_Create_Runtime_Composition_Root.md) | Create Runtime Composition Root | Ready | 2026-07-23 | 2026-07-23 | FND-003 |
 | [FND-005](../../Docs/Tickets/Backlog/FND-005_Create_Core_Clock_Abstractions.md) | Create Core Clock Abstractions | Backlog | 2026-07-23 | 2026-07-23 | FND-004 |
 | [FND-006](../../Docs/Tickets/Backlog/FND-006_Create_Scheduled_Task_Queue.md) | Create Scheduled Task Queue | Backlog | 2026-07-23 | 2026-07-23 | FND-005 |
 | [FND-007](../../Docs/Tickets/Backlog/FND-007_Create_Runtime_State_Primitives.md) | Create Runtime State Primitives | Backlog | 2026-07-23 | 2026-07-23 | FND-004 |
@@ -63,7 +63,8 @@ FND-004 Runtime Composition Root
 
 ## Ticket Detail Horizon
 
-- FND-003 through FND-006 are detailed enough for readiness review when their dependencies complete.
+- FND-004 is the sole ticket approved for immediate implementation.
+- FND-005 and FND-006 are detailed backlog tickets that require readiness review after their dependencies complete.
 - FND-007 and FND-008 are provisional backlog tickets and require design refinement before promotion to `Ready`.
 - Being listed in this epic does not authorize implementation.
 
