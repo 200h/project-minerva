@@ -1,7 +1,7 @@
 # FND-004: Create Runtime Composition Root
 
-**Status:** Ready  
-**Owner:** Unassigned  
+**Status:** Active
+**Owner:** Codex
 **Created:** 2026-07-23  
 **Updated:** 2026-07-23  
 **Roadmap Phase:** Phase 1 — Foundation  
@@ -347,24 +347,111 @@ Stop and report rather than guessing when:
 
 ### Status
 
+Implementation and validation are complete; the pull request is pending.
+
 ### Changed Files
+
+- Created `Assets/Minerva/Runtime/Core/RuntimeCompositionRoot.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeCompositionRoot.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/ComposedRuntime.cs`.
+- Created `Assets/Minerva/Runtime/Core/ComposedRuntime.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeCompositionResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeCompositionResult.cs.meta`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/RuntimeCompositionRootTests.cs`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/RuntimeCompositionRootTests.cs.meta`.
+- Moved this ticket from `Docs/Tickets/Ready/` to `Docs/Tickets/Active/`.
 
 ### Work Completed
 
+- Added one atomic plain-C# composition entry point that creates a fresh
+  `RuntimeBootstrap` and `InMemoryEventBus` for every attempt.
+- Added a one-shot explicit service seam that validates the supplied lifecycle
+  services before ownership transfer, registers them without exposing lookup or
+  post-start registration, and initializes the bootstrap exactly once.
+- Added a composed-runtime lifetime handle that exposes only event publication,
+  event subscription, shutdown diagnostics, and idempotent disposal.
+- Added an interface-only event capability facade so ordinary consumers do not
+  receive the concrete event-bus implementation.
+- Added focused tests for successful composition, capability exposure,
+  deterministic ordering, ownership, all startup-failure modes, cleanup failure
+  reporting, idempotent disposal, and runtime isolation.
+
 ### Composition and Ownership Design
+
+- `RuntimeCompositionRoot.Compose` is the only production boundary that
+  constructs or knows the concrete `RuntimeBootstrap` and `InMemoryEventBus`.
+- The root registers a private event-bus lifecycle adapter first, followed by
+  explicitly supplied lifecycle services in argument order. This makes the bus
+  available for the complete service lifetime and disposes it last during the
+  bootstrap's accepted reverse shutdown.
+- Ownership of supplied services transfers only after the complete service
+  argument list passes null and duplicate-instance validation. The returned
+  `ComposedRuntime` owns the bootstrap lifetime; callers must not independently
+  dispose transferred services.
+- The public composition seam is a single atomic operation. It exposes no
+  builder, service collection, service lookup, registration method, static
+  runtime instance, or mutable registry.
 
 ### Startup-Failure and Cleanup Behavior
 
+- Reported failures, null initialization results, and thrown initialization
+  exceptions remain represented by the accepted `RuntimeInitializationResult`,
+  including the failed service type and reason.
+- On any failed initialization result, the composition root synchronously
+  disposes the bootstrap before returning. Successfully initialized services
+  shut down in reverse order and the event-bus adapter disposes the bus last.
+- A failed result contains no runtime handle or event capability.
+- `RuntimeCompositionResult.CleanupResult` separately exposes shutdown failures
+  from failed-startup cleanup without replacing the original initialization
+  diagnostics.
+
 ### Validation
+
+- Pre-implementation Unity 5.6 runtime EditMode baseline: passed 28 of 28 tests
+  with 75 assertions, 0 failures, 0 skipped, and 0 inconclusive tests.
+- Unity 5.6.7f1 batch import/compile of an isolated project containing the exact
+  updated `Assets/Minerva` tree: passed with no compiler or import errors.
+- Complete Unity 5.6 runtime EditMode suite: passed 38 of 38 tests with 118
+  assertions, 0 failures, 0 skipped, and 0 inconclusive tests; the new
+  composition fixture contributed 10 passing tests.
+- Unity metadata stability: passed for committed `.meta` files and GUIDs; Unity
+  generated only uncommitted directory metadata inside the isolated project.
+- Prohibited runtime symbol search: passed; no `UnityEditor`, scene search,
+  hierarchy lookup, reflection construction or discovery, service locator,
+  generic service lookup, mutable static runtime collection, or global runtime
+  registry implementation was found.
+- Public API boundary search: passed; no arbitrary service enumeration, lookup,
+  or post-start registration API was added.
+- Domain and future-service boundary check: passed; no domain event or later
+  foundation service was added.
+- Forbidden asset and dependency check: passed; no `.unity`, `.prefab`,
+  `.asset`, `.asmdef`, package, vendor, or third-party file was added.
+- Newline check: passed for every created text file and this ticket.
+- `git diff --check`: passed.
+- Workflow location check: passed for the current phase; this ticket exists only
+  in `Docs/Tickets/Active/` with matching `Status`.
+- Authorized-path check: passed; every change is within the ticket-authorized
+  Core runtime, runtime test, or ticket path.
+- Linked epic check: passed against `main`; the epic exists and identifies
+  FND-004 as the current `Ready` ticket. The planning file was not modified.
 
 ### Deviations
 
+None.
+
 ### Blockers or Risks
+
+- Unity 5.6 emitted its previously observed legacy shutdown assertion after the
+  successful test result was saved; the process exited successfully and all
+  tests passed.
 
 ### Optional Context Used
 
+None.
+
 ### Follow-Up Suggestions
 
+None.
 ## Implementation Review Agent Record
 
 Completed by the independent reviewer while the ticket is in `Review`.
@@ -414,6 +501,6 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 | State | Timestamp | Actor | Evidence or Notes |
 |---|---|---|---|
 | Planned | 2026-07-23 17:30 EDT | Technical Director | Readiness pass completed against accepted FND-002 and FND-003 contracts; ticket promoted to Ready in documentation PR. |
-| In Progress |  |  |  |
+| In Progress | 2026-07-23 17:31 EDT | Codex | Began implementation on `agent/fnd-004-runtime-composition-root` from `main` at merged PR #11 (`867dcb3`). |
 | Committed |  |  |  |
 | Verified |  |  |  |
