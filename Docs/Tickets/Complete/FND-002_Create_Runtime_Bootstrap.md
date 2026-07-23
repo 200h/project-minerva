@@ -3,8 +3,9 @@
 **Status:** Complete
 **Owner:** Codex
 **Created:** 2026-07-21  
-**Updated:** 2026-07-21
+**Updated:** 2026-07-23
 **Roadmap Phase:** Phase 1 — Foundation  
+**Epic:** [Foundation Runtime Services](../../../Planning/Epics/Foundation_Runtime_Services.md) 
 **Related ADRs:** [`../../ADR/0001_Use_Unity_5_6.md`](../../ADR/0001_Use_Unity_5_6.md), [`../../ADR/0004_Ticket_Driven_AI_Implementation.md`](../../ADR/0004_Ticket_Driven_AI_Implementation.md)
 
 ## Summary

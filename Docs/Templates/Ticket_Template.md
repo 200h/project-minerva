@@ -5,6 +5,7 @@
 **Created:** YYYY-MM-DD  
 **Updated:** YYYY-MM-DD  
 **Roadmap Phase:**  
+**Epic:** [Epic Name](../../../Planning/Epics/EPIC_FILE.md)  
 **Related ADRs:**
 
 ## Summary
@@ -73,6 +74,7 @@ Read only when required by a specific implementation question:
 - Complete the Implementation Report before requesting review.
 - Do not update planning or governance documents unless explicitly authorized.
 - Use `America/New_York` for date and execution-state metadata.
+- Keep the linked epic register synchronized when the ticket changes status, title, created date, updated date, or dependency relationship. Planning updates require explicit authority and may be handled by the Technical Director or Repository Maintenance Operator.
 
 ## Architect's Notes
 
@@ -88,6 +90,7 @@ Read only when required by a specific implementation question:
 - 
 - Confirm the ticket exists in exactly one workflow directory.
 - Confirm the directory and `Status` field match.
+- Confirm the linked epic exists and identifies this ticket correctly.
 
 ## Definition of Done
 
