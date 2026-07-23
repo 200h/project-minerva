@@ -1,6 +1,6 @@
 # Milestones
 
-**Last Updated:** 2026-07-21  
+**Last Updated:** 2026-07-23  
 **Owner:** Product Owner and Technical Director
 
 ## Phase 0 — Preproduction
@@ -41,6 +41,8 @@
 
 ## Phase 1 — Foundation
 
+Phase 1 work is organized through the [Foundation Runtime Services epic](Epics/Foundation_Runtime_Services.md). The epic defines the multi-ticket dependency sequence; milestones remain demonstrable checkpoints.
+
 ### M1.1 Unity Repository Skeleton
 
 **Status:** Complete
@@ -53,23 +55,34 @@
 
 ### M1.2 Runtime Bootstrap
 
+**Status:** Complete
+
+- FND-002 prepared, implemented, independently reviewed, accepted, and merged through PR #7.
+- Deterministic explicit service registration and lifecycle established.
+- Failure handling and reverse shutdown behavior validated.
+- Repeated runtime construction validated without leaked static state.
+
+### M1.3 Foundation Runtime Services
+
 **Status:** Active
 
-- Prepare and approve FND-002.
-- Implement deterministic explicit service registration and lifecycle.
-- Verify failure handling and reverse shutdown behavior.
-- Verify repeated runtime construction without leaked static state.
-- Keep event, time, save, narrative, phone, editor-tool, and platform behavior out of scope.
+**Epic:** [Foundation Runtime Services](Epics/Foundation_Runtime_Services.md)
 
-**Current Deliverable:** `Docs/Tickets/Ready/FND-002_Create_Runtime_Bootstrap.md`
+- Implement generic core event publication and subscription.
+- Establish explicit runtime composition ownership.
+- Define deterministic runtime clock abstractions.
+- Add a generic scheduled-task queue.
+- Define constrained runtime state primitives.
+- Define versioned save-snapshot contracts without persistence.
+
+**Current Deliverable:** `Docs/Tickets/Ready/FND-003_Create_Core_Event_Bus.md`
 
 **Exit Criteria:**
 
-- FND-002 is approved and merged into `main` as a Ready ticket.
-- The runtime bootstrap implementation is reviewed and merged.
-- The ticket is moved through `Active` and `Review`, then closed under `Complete` after acceptance.
-- Unity 5.6 compilation and focused lifecycle validation pass.
-- No prohibited global discovery, service locator, singleton, or future-system behavior is introduced.
+- FND-003 through FND-008 are accepted and merged.
+- Generic event, composition, timing, scheduling, state, and snapshot contracts are validated in Unity 5.6.
+- No narrative, phone, application, UI, platform, persistence, or editor behavior is introduced prematurely.
+- Foundation services remain explicitly composed without scene discovery, global service locators, or reflection-based registration.
 
 ## Later Phase Milestones
 

@@ -5,6 +5,7 @@
 **Created:** YYYY-MM-DD  
 **Updated:** YYYY-MM-DD  
 **Roadmap Phase:**  
+**Epic:** [Epic Name](../../../Planning/Epics/EPIC_FILE.md)  
 **Related ADRs:**
 
 ## Summary
@@ -58,7 +59,8 @@ Read only when required by a specific implementation question:
 
 ## Prohibited Actions
 
-- Do not move this ticket to `Complete`; post-merge acceptance and closeout belong to the Technical Director.
+- Do not move this ticket to `Complete`; independent review and Technical Director acceptance are required.
+- Do not merge the implementation pull request.
 - 
 
 ## Expected Files
@@ -71,6 +73,8 @@ Read only when required by a specific implementation question:
 - Set `Status` to `Review` and update the date when moving from `Active` to `Review`.
 - Complete the Implementation Report before requesting review.
 - Do not update planning or governance documents unless explicitly authorized.
+- Use `America/New_York` for date and execution-state metadata.
+- Keep the linked epic register synchronized when the ticket changes status, title, created date, updated date, or dependency relationship. Planning updates require explicit authority and may be handled by the Technical Director or Repository Maintenance Operator.
 
 ## Architect's Notes
 
@@ -78,13 +82,15 @@ Read only when required by a specific implementation question:
 
 - [ ] 
 - [ ] The ticket directory and `Status` metadata match throughout implementation.
-- [ ] The implementation pull request contains this ticket under `Docs/Tickets/Review/`.
+- [ ] The implementation pull request contains this ticket under `Docs/Tickets/Review/` while independent review is pending.
+- [ ] After acceptance, the implementation pull request contains this ticket under `Docs/Tickets/Complete/` before merge.
 
 ## Required Validation
 
 - 
 - Confirm the ticket exists in exactly one workflow directory.
 - Confirm the directory and `Status` field match.
+- Confirm the linked epic exists and identifies this ticket correctly.
 
 ## Definition of Done
 
@@ -112,14 +118,51 @@ Read only when required by a specific implementation question:
 
 ### Follow-Up Suggestions
 
-## Technical Director Closeout
+## Implementation Review Agent Record
 
-Completed only after the implementation pull request is merged and accepted.
+Completed by the independent reviewer while the ticket is in `Review`.
 
-### Merge or PR Reference
+### Reviewer
+
+### Reviewed PR and Head
+
+### Scope and Acceptance Findings
+
+### Validation Assessment
+
+### Blocking Findings
+
+### Recommendation
+
+`Accept`, `Changes Required`, or `Blocked`.
+
+## Technical Director Acceptance
+
+Completed after reviewing the Implementation Review Agent recommendation and before merge.
+
+### Decision
+
+`Accepted`, `Changes Required`, or `Blocked`.
+
+### PR Reference
+
+### Acceptance Date
+
+Use `YYYY-MM-DD` in `America/New_York`.
 
 ### Final Validation Decision
 
 ### Accepted Deviations
 
 ### Follow-Up Tickets
+
+## Execution State Log
+
+Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
+
+| State | Timestamp | Actor | Evidence or Notes |
+|---|---|---|---|
+| Planned |  |  |  |
+| In Progress |  |  |  |
+| Committed |  |  |  |
+| Verified |  |  |  |
