@@ -1,6 +1,6 @@
 # FND-003: Create Core Event Bus
 
-**Status:** Active
+**Status:** Review
 **Owner:** Codex
 **Created:** 2026-07-23  
 **Updated:** 2026-07-23  
@@ -243,7 +243,7 @@ The bus may implement `IRuntimeService` when that produces a clean explicit life
 
 ### Status
 
-Implementation complete and validated; draft pull request pending.
+Implementation complete; draft pull request #10 is open for independent review.
 
 ### Changed Files
 
@@ -263,7 +263,7 @@ Implementation complete and validated; draft pull request pending.
 - Created `Assets/Minerva/Runtime/Core/InMemoryEventBus.cs.meta`.
 - Created `Assets/Minerva/Tests/Runtime/Editor/InMemoryEventBusTests.cs`.
 - Created `Assets/Minerva/Tests/Runtime/Editor/InMemoryEventBusTests.cs.meta`.
-- Moved this ticket from `Docs/Tickets/Ready/` to `Docs/Tickets/Active/`.
+- Moved this ticket from `Docs/Tickets/Ready/` through `Docs/Tickets/Active/` to `Docs/Tickets/Review/`.
 
 ### Work Completed
 
@@ -285,7 +285,7 @@ Implementation complete and validated; draft pull request pending.
 - Forbidden asset search: passed; no `.unity`, `.prefab`, `.asset`, `.asmdef`, package, or vendor file was added.
 - Newline check: passed for every created text file and this ticket.
 - `git diff --check`: passed.
-- Workflow location check: passed; this ticket exists only in `Docs/Tickets/Active/` with matching `Status`.
+- Workflow location check: passed; this ticket exists only in `Docs/Tickets/Review/` with matching `Status`.
 - Authorized-path check: passed; all changes are within ticket-authorized paths.
 
 ### Deviations
@@ -351,5 +351,5 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 |---|---|---|---|
 | Planned |  |  |  |
 | In Progress | 2026-07-23 16:45 EDT | Codex | Created `agent/fnd-003-core-event-bus` from current `main`; implementation started. |
-| Committed |  |  |  |
-| Verified |  |  |  |
+| Committed | 2026-07-23 16:54 EDT | Codex | Commit `9971b6988e3e3b8a876c74fb340ac08a5fe0439a` contains the validated implementation. |
+| Verified | 2026-07-23 16:55 EDT | Codex | Draft PR #10 opened against `main` from `agent/fnd-003-core-event-bus`; head matched commit `9971b6988e3e3b8a876c74fb340ac08a5fe0439a`. |
