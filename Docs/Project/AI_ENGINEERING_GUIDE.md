@@ -1,16 +1,16 @@
 # Project Minerva — AI Engineering Guide
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Status:** Draft  
 **Owner:** Technical Director  
-**Last Updated:** 2026-07-21  
-**Related Documents:** [`README.md`](README.md), [`ARCHITECTURAL_PRINCIPLES.md`](ARCHITECTURAL_PRINCIPLES.md), [`ENGINEERING_PHILOSOPHY.md`](ENGINEERING_PHILOSOPHY.md), [`GLOSSARY.md`](GLOSSARY.md), `Docs/Handbook/Ticket_Workflow.md`, `Docs/Templates/Ticket_Template.md`
+**Last Updated:** 2026-07-23  
+**Related Documents:** [`README.md`](README.md), [`ARCHITECTURAL_PRINCIPLES.md`](ARCHITECTURAL_PRINCIPLES.md), [`ENGINEERING_PHILOSOPHY.md`](ENGINEERING_PHILOSOPHY.md), [`GLOSSARY.md`](GLOSSARY.md), [`../Handbook/Ticket_Workflow.md`](../Handbook/Ticket_Workflow.md), [`../Templates/Ticket_Template.md`](../Templates/Ticket_Template.md)
 
 ## Purpose
 
-This document defines how Codex and other AI implementation agents must work within Project Minerva.
+This document defines how Codex and other AI agents work within Project Minerva.
 
-AI-assisted development is a controlled implementation workflow, not a substitute for architecture, product decisions, or technical direction. AI agents execute approved tickets using curated context and explicit authority.
+AI-assisted development is a controlled implementation and review workflow, not a substitute for architecture, product decisions, technical direction, or repository ownership. Agents execute approved work using curated context and explicit authority.
 
 The objective is to keep each task focused, reproducible, reviewable, and small enough to avoid unnecessary context expansion or architectural drift.
 
@@ -20,15 +20,39 @@ The objective is to keep each task focused, reproducible, reviewable, and small 
 
 Defines product priorities, player experience, narrative direction, and approval of major scope decisions.
 
+### Repository Owner
+
+Retains manual pull-request merge authority unless that authority is explicitly delegated through a future documented decision.
+
 ### Technical Director
 
-Owns architecture, governing documentation, system design, roadmap structure, ticket definition, implementation guardrails, and code review.
+Owns architecture, governing documentation, system design, roadmap structure, ticket definition, implementation guardrails, agent delegation, final acceptance decisions, and readiness-for-merge decisions.
+
+The Technical Director may delegate implementation validation. Delegated checks must be attributed to the agent that performed them; the Technical Director must not represent delegated work as personally executed.
 
 ### AI Implementation Engineer
 
 Implements the exact work authorized by an approved ticket, reports results, and stops when scope is complete or blocked.
 
-The AI Implementation Engineer does not independently redefine architecture, expand product scope, or create future work without authorization.
+The AI Implementation Engineer does not independently redefine architecture, expand product scope, accept its own work, move its own ticket to `Complete`, or merge the pull request.
+
+### Implementation Review Agent
+
+Independently reviews the current pull-request head against the approved ticket and required context. The Implementation Review Agent:
+
+- inspects the changed files and implementation delta;
+- verifies authorized paths and prohibited actions;
+- evaluates acceptance criteria and validation evidence;
+- identifies blocking findings, risks, and deviations;
+- recommends `Accept`, `Changes Required`, or `Blocked`.
+
+The Implementation Review Agent does not redesign requirements, implement fixes, make the final acceptance decision, move the ticket to `Complete`, or merge the pull request.
+
+### Repository Maintenance Operator
+
+Performs a narrowly authorized repository mutation when the normal execution path is unavailable or inappropriate. This is an operational role, not an implementation-review role.
+
+A maintenance operator may move or update an accepted ticket, correct metadata, or perform another explicitly bounded repository action. The operator must not reinterpret the acceptance decision or expand the authorized change.
 
 ## Governing Rule
 
@@ -61,7 +85,9 @@ Each ticket must define, as applicable:
 - acceptance criteria;
 - definition of done;
 - required validation;
-- implementation-report format.
+- implementation-report format;
+- review and acceptance records;
+- explicit lifecycle movement instructions.
 
 A ticket missing material implementation context should be returned for refinement rather than silently broadened through guesswork.
 
@@ -171,7 +197,7 @@ When an apparent requirement conflicts with the Project Constitution, stop and r
 
 ## Unity 5.6 Guardrails
 
-All generated C# and editor code must be compatible with Unity 5.6 and the project’s configured scripting runtime.
+All generated C# and editor code must be compatible with Unity 5.6 and the project's configured scripting runtime.
 
 Do not assume availability of:
 
@@ -281,6 +307,67 @@ Do not claim checks were run when they were not. Distinguish between passed vali
 
 If a check fails because of pre-existing unrelated issues, report the exact failure and evidence without fixing unrelated scope.
 
+## Independent Review and Acceptance
+
+The implementation workflow uses separate implementation, review, acceptance, and merge responsibilities:
+
+1. The AI Implementation Engineer completes the ticket and opens the pull request with the ticket in `Review`.
+2. The Technical Director dispatches an Implementation Review Agent against the current pull-request head.
+3. The Implementation Review Agent returns findings and an acceptance recommendation.
+4. The Technical Director evaluates that recommendation and makes the final acceptance decision.
+5. When accepted, the Technical Director moves the ticket to `Complete` in the same implementation pull request.
+6. The repository owner performs the manual merge.
+
+If commits are added after review, the Technical Director reviews the delta. Material implementation changes require a full or delta Implementation Review Agent pass. Administrative changes may rely on the existing review when their delta is independently verified and cannot affect the reviewed implementation.
+
+## Repository Execution Paths
+
+An unavailable integration path does not automatically block an authorized task when another approved path exists.
+
+### Path A — GitHub-Native Execution
+
+`Agent → GitHub API → Commit → Pull Request`
+
+Use when the acting agent has verified GitHub write capability for the required mutation.
+
+### Path B — Local Workspace Execution
+
+`Agent → Local Filesystem → Local Git Commit → Push`
+
+Use when GitHub-native mutation is unavailable but an authorized local agent, such as Codex, can access the checked-out repository.
+
+### Path C — Human Execution
+
+`Repository Owner → Local Filesystem → Local Git Commit → Push`
+
+Use when agent execution is unavailable, unsafe, or unnecessary.
+
+Before selecting a path, verify the actor has the required read, write, commit, and push capabilities. Do not dispatch another agent merely to create the appearance of progress when it has the same unavailable capability.
+
+The chosen path does not change ticket scope, acceptance authority, or merge authority.
+
+## Execution State Integrity
+
+Agents must distinguish intended actions from verified repository mutations.
+
+Use these states:
+
+- `Planned` — authority and intended mutation are defined; execution has not begun.
+- `In Progress` — the authorized actor is performing the mutation.
+- `Committed` — a commit containing the intended mutation exists.
+- `Verified` — the resulting commit, branch, diff, or pull-request state has been inspected and matches the intended action.
+
+Each state record must include:
+
+- state;
+- timestamp in `America/New_York` using `YYYY-MM-DD HH:mm z`;
+- actor;
+- concise evidence or notes.
+
+Date-only ticket metadata uses `YYYY-MM-DD` in `America/New_York`.
+
+Do not say that a file was changed, a commit was created, a ticket moved, or a pull request updated until that state is supported by repository evidence. When a mutation fails or has not occurred, say so directly.
+
 ## Implementation Report
 
 Every completed or blocked ticket must return a concise implementation report with:
@@ -334,16 +421,19 @@ Stop implementation and report before proceeding when:
 - Unity 5.6 compatibility cannot be established;
 - the requested task is already implemented differently than the ticket assumes;
 - validation reveals corruption or a broader architectural defect;
-- the ticket’s acceptance criteria cannot be met within its stated scope.
+- the ticket's acceptance criteria cannot be met within its stated scope.
 
 Stopping under these conditions is correct engineering behavior, not failure.
 
+An unavailable GitHub mutation path is not itself a stop condition when an authorized Path B or Path C execution route is available. Report the failed capability accurately and route the task through the approved fallback.
+
 ## Prohibited AI Behaviors
 
-An AI implementation agent must not:
+An AI agent must not:
 
 - claim to have read files it did not access;
 - claim to have run tests it did not run;
+- claim repository mutations occurred without commit or state evidence;
 - fabricate APIs, files, repository state, or tool results;
 - conceal incomplete work behind confident language;
 - silently weaken acceptance criteria;
@@ -361,22 +451,33 @@ A Codex work request should be concise because the ticket contains the details:
 ```text
 Implement <TICKET-ID> from <exact ticket path>.
 
-Follow the ticket’s Required Context, authority boundaries, acceptance criteria,
+Follow the ticket's Required Context, authority boundaries, acceptance criteria,
 and implementation-report format. Do not read or modify unrelated areas.
 Stop and report if a defined stop condition occurs.
+```
+
+For a narrowly authorized maintenance fallback, use:
+
+```text
+Perform the approved repository maintenance task against <exact branch and paths>.
+Do not implement code, reinterpret acceptance, expand scope, or merge the PR.
+Show the diff and validation evidence before commit or push when requested.
 ```
 
 Do not paste the entire project history into the prompt when the repository ticket and curated context are available.
 
 ## Completion Standard
 
-The AI implementation workflow is successful when:
+The AI engineering workflow is successful when:
 
 - the task remains within approved scope;
 - the context window contains only relevant authoritative material;
 - the diff is focused and reviewable;
 - architectural ownership remains intact;
+- implementation, review, acceptance, and merge roles remain distinct;
 - required validation is honestly reported;
+- repository execution states are supported by evidence;
+- an unavailable integration is routed through an authorized fallback when possible;
 - the repository contains enough updated knowledge for the next contributor;
 - unresolved issues are surfaced rather than hidden.
 
