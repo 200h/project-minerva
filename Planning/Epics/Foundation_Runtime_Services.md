@@ -36,8 +36,8 @@ Ticket directories and ticket metadata are authoritative. This table is a synchr
 
 | Ticket | Title | Status | Created | Last Updated | Depends On |
 |---|---|---|---|---|---|
-| [FND-001](../../Docs/Tickets/Complete/FND-001_Create_Unity_Project_Skeleton.md) | Create Unity Project Skeleton | Complete | 2026-07-21 | 2026-07-23 | — |
-| [FND-002](../../Docs/Tickets/Complete/FND-002_Create_Runtime_Bootstrap.md) | Create Runtime Bootstrap | Complete | 2026-07-21 | 2026-07-23 | FND-001 |
+| [FND-001](../../Docs/Tickets/Complete/FND-001_Create_Unity_Project_Skeleton.md) | Create Unity Project Skeleton | Complete | 2026-07-21 | 2026-07-21 | — |
+| [FND-002](../../Docs/Tickets/Complete/FND-002_Create_Runtime_Bootstrap.md) | Create Runtime Bootstrap | Complete | 2026-07-21 | 2026-07-21 | FND-001 |
 | [FND-003](../../Docs/Tickets/Ready/FND-003_Create_Core_Event_Bus.md) | Create Core Event Bus | Ready | 2026-07-23 | 2026-07-23 | FND-002 |
 | [FND-004](../../Docs/Tickets/Backlog/FND-004_Create_Runtime_Composition_Root.md) | Create Runtime Composition Root | Backlog | 2026-07-23 | 2026-07-23 | FND-003 |
 | [FND-005](../../Docs/Tickets/Backlog/FND-005_Create_Core_Clock_Abstractions.md) | Create Core Clock Abstractions | Backlog | 2026-07-23 | 2026-07-23 | FND-004 |
