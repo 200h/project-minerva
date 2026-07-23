@@ -125,13 +125,14 @@ Use narrow exact-symbol searches only when required to locate a direct accepted 
 
 - ManualRuntimeClock is a plain-C# IRuntimeService so the accepted FND-004 composition operation can own it explicitly.
 - Initialize returns a successful ServiceInitializationResult and must not change CurrentTime or IsPaused.
+- Repeated Initialize calls before shutdown return success and do not change state.
 - ManualRuntimeClock is operational immediately after construction for focused deterministic tests; Initialize does not create a second semantic start point.
 - Shutdown is idempotent and terminal.
 - Shutdown must not reset CurrentTime or IsPaused.
 - After shutdown, CurrentTime and IsPaused remain readable for diagnostics.
 - After shutdown, Pause, Resume, and Advance throw ObjectDisposedException and do not change state.
 - ManualRuntimeClock must not expose IDisposable if doing so would create a competing disposal path after ownership transfer. The accepted IRuntimeService shutdown path is authoritative.
-- No operation may revive or reinitialize a shut-down clock.
+- Initialize after shutdown returns a failed ServiceInitializationResult with an actionable reason, does not throw, and does not revive or change the clock.
 
 ### Manual Test-Clock Behavior
 
@@ -166,7 +167,7 @@ FND-005 must prove compatibility with the accepted FND-004 composition seam with
 - Use explicit checked boundary handling that preserves clock state after a failed advance.
 - Keep all public contracts XML documented.
 - Use only Unity 5.6-compatible C# syntax and runtime libraries.
-- Add focused Unity 5.6-compatible EditMode tests for values, advancement, pause/resume, boundaries, lifecycle, composition compatibility, and isolation.
+- Add focused Unity 5.6-compatible EditMode tests for values, advancement, pause/resume, boundaries, repeated initialization, post-shutdown initialization failure, composition compatibility, and isolation.
 - Preserve all accepted FND-002 through FND-004 tests unchanged.
 
 ## Out of Scope
@@ -303,7 +304,8 @@ Do not add event notifications merely to make state observable. Synchronous read
 - [ ] Advancement while paused is ignored without hidden accumulation or exception.
 - [ ] An overflowing advance throws OverflowException and leaves CurrentTime unchanged.
 - [ ] No API permits time to move backward, reset, wrap, or silently clamp.
-- [ ] Initialize succeeds without changing CurrentTime or IsPaused.
+- [ ] Initialize is idempotently successful before shutdown and never changes CurrentTime or IsPaused.
+- [ ] Initialize after shutdown returns an actionable failed ServiceInitializationResult without reviving or changing the clock.
 - [ ] Shutdown is idempotent and terminal without resetting readable state.
 - [ ] After shutdown, CurrentTime and IsPaused remain readable while Pause, Resume, and Advance throw ObjectDisposedException.
 - [ ] ManualRuntimeClock implements IRuntimeService and composes successfully through RuntimeCompositionRoot without changing accepted composition files.
