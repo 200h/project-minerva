@@ -1,7 +1,7 @@
 # FND-004: Create Runtime Composition Root
 
-**Status:** Ready  
-**Owner:** Unassigned  
+**Status:** Complete
+**Owner:** Codex
 **Created:** 2026-07-23  
 **Updated:** 2026-07-23  
 **Roadmap Phase:** Phase 1 — Foundation  
@@ -274,32 +274,32 @@ Do not anticipate FND-005 clock composition. FND-005 will extend the accepted co
 
 ## Acceptance Criteria
 
-- [ ] One explicit composition root creates the approved foundation runtime instance.
-- [ ] Each composition attempt creates a fresh `RuntimeBootstrap` and fresh `InMemoryEventBus` with no shared mutable runtime state.
-- [ ] Successful composition initializes registered services once in documented deterministic order.
-- [ ] Successful composition returns one usable runtime lifetime handle and no startup failure.
-- [ ] The successful runtime exposes event publishing and subscription through `IEventPublisher` and `IEventSubscriber` or an equally narrow accepted interface boundary.
-- [ ] Ordinary consumers cannot access arbitrary services through type, key, string, generic lookup, collection enumeration, or mutable registry.
-- [ ] The successful runtime does not expose post-start service registration.
-- [ ] Disposing the successful runtime shuts down initialized services in reverse order and disposes the event bus exactly once.
-- [ ] Repeated disposal of the successful runtime is safe and does not repeat owned cleanup.
-- [ ] Event publication and subscription reject new work after the composed runtime is disposed, consistent with accepted event-bus behavior.
-- [ ] Reported, null-result, and thrown initialization failures produce no usable runtime handle.
-- [ ] Startup failure preserves the original failed service type and failure reason from `RuntimeInitializationResult`.
-- [ ] Startup failure immediately cleans up every successfully initialized or composition-owned resource before returning.
-- [ ] Cleanup failures during failed startup remain inspectable without erasing the original initialization failure.
-- [ ] Separate runtimes can be composed, used, and disposed repeatedly without shared subscriptions or leaked static state.
-- [ ] Existing FND-002 and FND-003 tests continue to pass unchanged unless a stop condition is raised.
-- [ ] Runtime implementation contains no `UnityEditor` reference.
-- [ ] No scene search, hidden singleton, global registry, service locator, dependency-injection container, or reflection discovery is introduced.
-- [ ] No domain-specific or later-foundation behavior is added.
-- [ ] Focused tests cover success, capability exposure, ordering, ownership, failure cleanup, cleanup failure reporting, idempotent disposal, and runtime-instance isolation.
-- [ ] Every new Unity asset has a stable `.meta` file.
-- [ ] The final diff contains only authorized paths.
-- [ ] The implementation report accurately records changes, design choices, optional context, and validation.
-- [ ] The ticket directory and `Status` metadata match throughout implementation.
-- [ ] The implementation pull request contains this ticket under `Docs/Tickets/Review/` while independent review is pending.
-- [ ] After acceptance, the implementation pull request contains this ticket under `Docs/Tickets/Complete/` before merge.
+- [x] One explicit composition root creates the approved foundation runtime instance.
+- [x] Each composition attempt creates a fresh `RuntimeBootstrap` and fresh `InMemoryEventBus` with no shared mutable runtime state.
+- [x] Successful composition initializes registered services once in documented deterministic order.
+- [x] Successful composition returns one usable runtime lifetime handle and no startup failure.
+- [x] The successful runtime exposes event publishing and subscription through `IEventPublisher` and `IEventSubscriber` or an equally narrow accepted interface boundary.
+- [x] Ordinary consumers cannot access arbitrary services through type, key, string, generic lookup, collection enumeration, or mutable registry.
+- [x] The successful runtime does not expose post-start service registration.
+- [x] Disposing the successful runtime shuts down initialized services in reverse order and disposes the event bus exactly once.
+- [x] Repeated disposal of the successful runtime is safe and does not repeat owned cleanup.
+- [x] Event publication and subscription reject new work after the composed runtime is disposed, consistent with accepted event-bus behavior.
+- [x] Reported, null-result, and thrown initialization failures produce no usable runtime handle.
+- [x] Startup failure preserves the original failed service type and failure reason from `RuntimeInitializationResult`.
+- [x] Startup failure immediately cleans up every successfully initialized or composition-owned resource before returning.
+- [x] Cleanup failures during failed startup remain inspectable without erasing the original initialization failure.
+- [x] Separate runtimes can be composed, used, and disposed repeatedly without shared subscriptions or leaked static state.
+- [x] Existing FND-002 and FND-003 tests continue to pass unchanged unless a stop condition is raised.
+- [x] Runtime implementation contains no `UnityEditor` reference.
+- [x] No scene search, hidden singleton, global registry, service locator, dependency-injection container, or reflection discovery is introduced.
+- [x] No domain-specific or later-foundation behavior is added.
+- [x] Focused tests cover success, capability exposure, ordering, ownership, failure cleanup, cleanup failure reporting, idempotent disposal, and runtime-instance isolation.
+- [x] Every new Unity asset has a stable `.meta` file.
+- [x] The final diff contains only authorized paths.
+- [x] The implementation report accurately records changes, design choices, optional context, and validation.
+- [x] The ticket directory and `Status` metadata match throughout implementation.
+- [x] The implementation pull request contains this ticket under `Docs/Tickets/Review/` while independent review is pending.
+- [x] After acceptance, the implementation pull request contains this ticket under `Docs/Tickets/Complete/` before merge.
 
 ## Required Validation
 
@@ -336,56 +336,172 @@ Stop and report rather than guessing when:
 
 ## Definition of Done
 
-- [ ] Acceptance criteria satisfied.
-- [ ] Required validation reported accurately.
-- [ ] Documentation updated.
-- [ ] No unauthorized changes.
-- [ ] Implementation report completed.
-- [ ] Ticket exists only in `Docs/Tickets/Review/` when implementation review begins.
+- [x] Acceptance criteria satisfied.
+- [x] Required validation reported accurately.
+- [x] Documentation updated.
+- [x] No unauthorized changes.
+- [x] Implementation report completed.
+- [x] Ticket exists only in `Docs/Tickets/Review/` when implementation review begins.
 
 ## Implementation Report
 
 ### Status
 
+Implementation and validation are complete. Independent review passed, Technical
+Director acceptance was granted, and pull request #12 is ready for owner merge
+against `main`.
+
 ### Changed Files
+
+- Created `Assets/Minerva/Runtime/Core/RuntimeCompositionRoot.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeCompositionRoot.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/ComposedRuntime.cs`.
+- Created `Assets/Minerva/Runtime/Core/ComposedRuntime.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeCompositionResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeCompositionResult.cs.meta`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/RuntimeCompositionRootTests.cs`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/RuntimeCompositionRootTests.cs.meta`.
+- Moved this ticket from `Docs/Tickets/Ready/` through
+  `Docs/Tickets/Active/` to `Docs/Tickets/Review/`.
 
 ### Work Completed
 
+- Added one atomic plain-C# composition entry point that creates a fresh
+  `RuntimeBootstrap` and `InMemoryEventBus` for every attempt.
+- Added a one-shot explicit service seam that validates the supplied lifecycle
+  services before ownership transfer, registers them without exposing lookup or
+  post-start registration, and initializes the bootstrap exactly once.
+- Added a composed-runtime lifetime handle that exposes only event publication,
+  event subscription, shutdown diagnostics, and idempotent disposal.
+- Added an interface-only event capability facade so ordinary consumers do not
+  receive the concrete event-bus implementation.
+- Added focused tests for successful composition, capability exposure,
+  deterministic ordering, ownership, all startup-failure modes, cleanup failure
+  reporting, idempotent disposal, and runtime isolation.
+
 ### Composition and Ownership Design
+
+- `RuntimeCompositionRoot.Compose` is the only production boundary that
+  constructs or knows the concrete `RuntimeBootstrap` and `InMemoryEventBus`.
+- The root registers a private event-bus lifecycle adapter first, followed by
+  explicitly supplied lifecycle services in argument order. This makes the bus
+  available for the complete service lifetime and disposes it last during the
+  bootstrap's accepted reverse shutdown.
+- Ownership of supplied services transfers only after the complete service
+  argument list passes null and duplicate-instance validation. The returned
+  `ComposedRuntime` owns the bootstrap lifetime; callers must not independently
+  dispose transferred services.
+- The public composition seam is a single atomic operation. It exposes no
+  builder, service collection, service lookup, registration method, static
+  runtime instance, or mutable registry.
 
 ### Startup-Failure and Cleanup Behavior
 
+- Reported failures, null initialization results, and thrown initialization
+  exceptions remain represented by the accepted `RuntimeInitializationResult`,
+  including the failed service type and reason.
+- On any failed initialization result, the composition root synchronously
+  disposes the bootstrap before returning. Successfully initialized services
+  shut down in reverse order and the event-bus adapter disposes the bus last.
+- A failed result contains no runtime handle or event capability.
+- `RuntimeCompositionResult.CleanupResult` separately exposes shutdown failures
+  from failed-startup cleanup without replacing the original initialization
+  diagnostics.
+
 ### Validation
+
+- Pre-implementation Unity 5.6 runtime EditMode baseline: passed 28 of 28 tests
+  with 75 assertions, 0 failures, 0 skipped, and 0 inconclusive tests.
+- Unity 5.6.7f1 batch import/compile of an isolated project containing the exact
+  updated `Assets/Minerva` tree: passed with no compiler or import errors.
+- Complete Unity 5.6 runtime EditMode suite: passed 38 of 38 tests with 118
+  assertions, 0 failures, 0 skipped, and 0 inconclusive tests; the new
+  composition fixture contributed 10 passing tests.
+- Unity metadata stability: passed for committed `.meta` files and GUIDs; Unity
+  generated only uncommitted directory metadata inside the isolated project.
+- Prohibited runtime symbol search: passed; no `UnityEditor`, scene search,
+  hierarchy lookup, reflection construction or discovery, service locator,
+  generic service lookup, mutable static runtime collection, or global runtime
+  registry implementation was found.
+- Public API boundary search: passed; no arbitrary service enumeration, lookup,
+  or post-start registration API was added.
+- Domain and future-service boundary check: passed; no domain event or later
+  foundation service was added.
+- Forbidden asset and dependency check: passed; no `.unity`, `.prefab`,
+  `.asset`, `.asmdef`, package, vendor, or third-party file was added.
+- Newline check: passed for every created text file and this ticket.
+- `git diff --check`: passed.
+- Workflow location check: passed; this ticket exists only in
+  `Docs/Tickets/Review/` with matching `Status`.
+- Authorized-path check: passed; every change is within the ticket-authorized
+  Core runtime, runtime test, or ticket path.
+- Linked epic check: passed against `main`; the epic exists and identifies
+  FND-004 as the current `Ready` ticket. The planning file was not modified.
 
 ### Deviations
 
+None.
+
 ### Blockers or Risks
+
+- Unity 5.6 emitted its previously observed legacy shutdown assertion after the
+  successful test result was saved; the process exited successfully and all
+  tests passed.
 
 ### Optional Context Used
 
+None.
+
 ### Follow-Up Suggestions
 
+None.
 ## Implementation Review Agent Record
 
 Completed by the independent reviewer while the ticket is in `Review`.
 
 ### Reviewer
 
+Independent Review Agent
+
 ### Reviewed PR and Head
+
+- PR #12
+- Implementation head: `2aa35f10750af08515fba8d5a5f89cf32937ffd8`
 
 ### Scope and Acceptance Findings
 
+The implementation remained within authorized runtime, test, and ticket paths.
+All ticket acceptance criteria were satisfied, with no unauthorized scope
+expansion or domain-specific behavior.
+
 ### Lifecycle and Ownership Assessment
+
+The composition root preserves explicit construction, deterministic
+initialization and reverse shutdown, singular ownership, narrow capability
+exposure, idempotent disposal, and runtime-instance isolation. No service
+locator, mutable global registry, reflection discovery, or post-start
+registration was introduced.
 
 ### Startup-Failure Assessment
 
+Reported, null-result, and thrown initialization failures return no usable
+runtime. Original initialization diagnostics remain inspectable alongside any
+cleanup failures, and composition-owned resources are synchronously cleaned up.
+
 ### Validation Assessment
+
+Unity 5.6 import and compilation passed. The complete runtime EditMode suite
+passed 38 of 38 tests with 118 assertions, 0 failures, 0 skipped, and 0
+inconclusive tests. Authorized-path, prohibited-symbol, metadata, newline, and
+`git diff --check` validation passed.
 
 ### Blocking Findings
 
+None.
+
 ### Recommendation
 
-`Accept`, `Changes Required`, or `Blocked`.
+Accept.
 
 ## Technical Director Acceptance
 
@@ -393,19 +509,29 @@ Completed after reviewing the Implementation Review Agent recommendation and bef
 
 ### Decision
 
-`Accepted`, `Changes Required`, or `Blocked`.
+Accepted.
 
 ### PR Reference
 
+PR #12
+
 ### Acceptance Date
 
-Use `YYYY-MM-DD` in `America/New_York`.
+2026-07-23
 
 ### Final Validation Decision
 
+Accepted. The Independent Review Agent's validation remains applicable to
+implementation head `2aa35f10750af08515fba8d5a5f89cf32937ffd8`, and the
+documentation-only closeout does not modify runtime or test files.
+
 ### Accepted Deviations
 
+None.
+
 ### Follow-Up Tickets
+
+None.
 
 ## Execution State Log
 
@@ -414,6 +540,7 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 | State | Timestamp | Actor | Evidence or Notes |
 |---|---|---|---|
 | Planned | 2026-07-23 17:30 EDT | Technical Director | Readiness pass completed against accepted FND-002 and FND-003 contracts; ticket promoted to Ready in documentation PR. |
-| In Progress |  |  |  |
-| Committed |  |  |  |
-| Verified |  |  |  |
+| In Progress | 2026-07-23 17:31 EDT | Codex | Began implementation on `agent/fnd-004-runtime-composition-root` from `main` at merged PR #11 (`867dcb3`). |
+| Committed | 2026-07-23 17:39 EDT | Codex | Commit `36ca334f4eca645bac244cae65fdad298c9ab265` contains the validated implementation. |
+| Verified | 2026-07-23 17:40 EDT | Codex | Draft PR #12 opened against `main`; base is merged PR #11 (`867dcb3`) and the implementation head is `36ca334`. |
+| Verified | 2026-07-23 17:49 EDT | Technical Director | Accepted the Independent Review Agent recommendation for PR #12 at reviewed implementation head `2aa35f10750af08515fba8d5a5f89cf32937ffd8`; ticket approved for completion before owner merge. |
