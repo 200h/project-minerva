@@ -26,8 +26,8 @@ It does not own narrative rules, phone applications, UI navigation, authored con
 
 ## Progress
 
-**Progress:** 5 Complete · 1 Ready · 2 Backlog  
-**Current Execution Ticket:** FND-006  
+**Progress:** 6 Complete · 1 Ready · 1 Backlog  
+**Current Execution Ticket:** FND-007  
 **Last Updated:** 2026-07-23  
 
 ## Included Tickets
@@ -41,8 +41,8 @@ Ticket directories and ticket metadata are authoritative. This table is a synchr
 | [FND-003](../../Docs/Tickets/Complete/FND-003_Create_Core_Event_Bus.md) | Create Core Event Bus | Complete | 2026-07-23 | 2026-07-23 | FND-002 |
 | [FND-004](../../Docs/Tickets/Complete/FND-004_Create_Runtime_Composition_Root.md) | Create Runtime Composition Root | Complete | 2026-07-23 | 2026-07-23 | FND-003 |
 | [FND-005](../../Docs/Tickets/Complete/FND-005_Create_Core_Clock_Abstractions.md) | Create Core Clock Abstractions | Complete | 2026-07-23 | 2026-07-23 | FND-004 |
-| [FND-006](../../Docs/Tickets/Ready/FND-006_Create_Scheduled_Task_Queue.md) | Create Scheduled Task Queue | Ready | 2026-07-23 | 2026-07-23 | FND-005 |
-| [FND-007](../../Docs/Tickets/Backlog/FND-007_Create_Runtime_State_Primitives.md) | Create Runtime State Primitives | Backlog | 2026-07-23 | 2026-07-23 | FND-004 |
+| [FND-006](../../Docs/Tickets/Complete/FND-006_Create_Scheduled_Task_Queue.md) | Create Scheduled Task Queue | Complete | 2026-07-23 | 2026-07-23 | FND-005 |
+| [FND-007](../../Docs/Tickets/Ready/FND-007_Create_Runtime_State_Primitives.md) | Create Runtime State Primitives | Ready | 2026-07-23 | 2026-07-23 | FND-004 |
 | [FND-008](../../Docs/Tickets/Backlog/FND-008_Define_Save_Snapshot_Contracts.md) | Define Save Snapshot Contracts | Backlog | 2026-07-23 | 2026-07-23 | FND-007 |
 
 ## Dependency Graph
@@ -63,8 +63,8 @@ FND-004 Runtime Composition Root
 
 ## Ticket Detail Horizon
 
-- FND-006 is the sole ticket approved for immediate implementation.
-- FND-007 and FND-008 are provisional backlog tickets and require design refinement before promotion to `Ready`.
+- FND-007 is the sole ticket approved for immediate implementation.
+- FND-008 remains a provisional backlog ticket and requires design refinement after FND-007 is accepted.
 - Being listed in this epic does not authorize implementation.
 
 ## Completion Criteria
@@ -88,10 +88,19 @@ This epic is complete when:
 - editor tooling and visualization;
 - final application and phone composition.
 
+## Resolved Design Decisions
+
+- FND-007 uses isolated generic typed state cells with explicit owner-qualified stable identity and separate read/mutation capabilities.
+- FND-007 does not introduce a global stable-key registry or untyped property bag.
+- Equal identities on separately constructed primitive cells are allowed and remain isolated; aggregate owners must reject duplicates within their own boundary.
+- Completed-change event publication is optional and fixed at state-cell construction.
+- State mutation is authoritative before publication; event failures do not roll back the completed change.
+- Snapshot participation remains owner-defined and is deferred to FND-008.
+
 ## Design Questions to Revisit
 
-- Whether runtime state primitives should use typed containers, stable keys, or another constrained ownership model.
 - Whether snapshot participation is coordinated directly by the composition root or by a later dedicated save service.
+- The exact FND-008 contribution identity, version compatibility, validation, and transactional restore contracts.
 - Whether later domain events require envelopes for timestamps, correlation, or provenance.
 
 These questions must not broaden earlier tickets unless a concrete dependency requires it.
