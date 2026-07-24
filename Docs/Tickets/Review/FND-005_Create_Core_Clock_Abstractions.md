@@ -1,6 +1,6 @@
 # FND-005: Create Core Clock Abstractions
 
-**Status:** Active
+**Status:** Review
 **Owner:** Codex
 **Created:** 2026-07-23  
 **Updated:** 2026-07-23  
@@ -292,33 +292,33 @@ Do not add event notifications merely to make state observable. Synchronous read
 
 ## Acceptance Criteria
 
-- [ ] RuntimeInstant is immutable, nonnegative, uses Int64 milliseconds, exposes Zero, and supports deterministic equality and ordering.
-- [ ] RuntimeDuration is immutable, nonnegative, uses Int64 milliseconds, exposes Zero, and supports deterministic equality and ordering.
-- [ ] Negative timestamp and duration construction throws ArgumentOutOfRangeException.
-- [ ] IRuntimeClock exposes only CurrentTime and IsPaused.
-- [ ] IRuntimeClockControl exposes only Pause, Resume, and Advance.
-- [ ] A new ManualRuntimeClock begins at zero unless given an explicit valid initial instant.
-- [ ] Positive advancement while running increases CurrentTime exactly by the requested milliseconds.
-- [ ] Zero advancement is an idempotent no-op.
-- [ ] Pause and Resume are idempotent and never change CurrentTime.
-- [ ] Advancement while paused is ignored without hidden accumulation or exception.
-- [ ] An overflowing advance throws OverflowException and leaves CurrentTime unchanged.
-- [ ] No API permits time to move backward, reset, wrap, or silently clamp.
-- [ ] Initialize is idempotently successful before shutdown and never changes CurrentTime or IsPaused.
-- [ ] Initialize after shutdown returns an actionable failed ServiceInitializationResult without reviving or changing the clock.
-- [ ] Shutdown is idempotent and terminal without resetting readable state.
-- [ ] After shutdown, CurrentTime and IsPaused remain readable while Pause, Resume, and Advance throw ObjectDisposedException.
-- [ ] ManualRuntimeClock implements IRuntimeService and composes successfully through RuntimeCompositionRoot without changing accepted composition files.
-- [ ] Composition-owned shutdown makes the clock reject later mutation.
-- [ ] Separate clock and composed-runtime instances remain isolated with no shared mutable state.
-- [ ] No scheduling, event publication, Unity time, platform time, domain behavior, or automatic advancement is introduced.
-- [ ] Existing FND-002 through FND-004 tests pass unchanged.
-- [ ] Runtime implementation contains no UnityEditor reference.
-- [ ] Every new Unity asset has a stable meta file.
-- [ ] Only authorized new files and ticket lifecycle changes are present.
-- [ ] The implementation report accurately records design, validation, optional context, and deviations.
-- [ ] The ticket directory and Status metadata match throughout implementation.
-- [ ] The implementation pull request contains this ticket under Docs/Tickets/Review/ while independent review is pending.
+- [x] RuntimeInstant is immutable, nonnegative, uses Int64 milliseconds, exposes Zero, and supports deterministic equality and ordering.
+- [x] RuntimeDuration is immutable, nonnegative, uses Int64 milliseconds, exposes Zero, and supports deterministic equality and ordering.
+- [x] Negative timestamp and duration construction throws ArgumentOutOfRangeException.
+- [x] IRuntimeClock exposes only CurrentTime and IsPaused.
+- [x] IRuntimeClockControl exposes only Pause, Resume, and Advance.
+- [x] A new ManualRuntimeClock begins at zero unless given an explicit valid initial instant.
+- [x] Positive advancement while running increases CurrentTime exactly by the requested milliseconds.
+- [x] Zero advancement is an idempotent no-op.
+- [x] Pause and Resume are idempotent and never change CurrentTime.
+- [x] Advancement while paused is ignored without hidden accumulation or exception.
+- [x] An overflowing advance throws OverflowException and leaves CurrentTime unchanged.
+- [x] No API permits time to move backward, reset, wrap, or silently clamp.
+- [x] Initialize is idempotently successful before shutdown and never changes CurrentTime or IsPaused.
+- [x] Initialize after shutdown returns an actionable failed ServiceInitializationResult without reviving or changing the clock.
+- [x] Shutdown is idempotent and terminal without resetting readable state.
+- [x] After shutdown, CurrentTime and IsPaused remain readable while Pause, Resume, and Advance throw ObjectDisposedException.
+- [x] ManualRuntimeClock implements IRuntimeService and composes successfully through RuntimeCompositionRoot without changing accepted composition files.
+- [x] Composition-owned shutdown makes the clock reject later mutation.
+- [x] Separate clock and composed-runtime instances remain isolated with no shared mutable state.
+- [x] No scheduling, event publication, Unity time, platform time, domain behavior, or automatic advancement is introduced.
+- [x] Existing FND-002 through FND-004 tests pass unchanged.
+- [x] Runtime implementation contains no UnityEditor reference.
+- [x] Every new Unity asset has a stable meta file.
+- [x] Only authorized new files and ticket lifecycle changes are present.
+- [x] The implementation report accurately records design, validation, optional context, and deviations.
+- [x] The ticket directory and Status metadata match throughout implementation.
+- [x] The implementation pull request contains this ticket under Docs/Tickets/Review/ while independent review is pending.
 - [ ] After acceptance, the implementation pull request contains this ticket under Docs/Tickets/Complete/ before merge.
 
 ## Required Validation
@@ -357,19 +357,20 @@ Stop and report rather than guessing when:
 
 ## Definition of Done
 
-- [ ] Acceptance criteria satisfied.
-- [ ] Required validation reported accurately.
-- [ ] Documentation updated.
-- [ ] No unauthorized changes.
-- [ ] Implementation report completed.
-- [ ] Ticket exists only in Docs/Tickets/Review/ when implementation review begins.
+- [x] Acceptance criteria satisfied.
+- [x] Required validation reported accurately.
+- [x] Documentation updated.
+- [x] No unauthorized changes.
+- [x] Implementation report completed.
+- [x] Ticket exists only in Docs/Tickets/Review/ when implementation review begins.
 
 ## Implementation Report
 
 ### Status
 
-Implementation and validation are complete. The ticket moved from Ready to
-Active at 2026-07-23 20:03 EDT. A draft pull request is pending.
+Implementation and validation are complete. Draft pull request #14 is open
+against `main` for independent review. The ticket moved from Ready to Active at
+2026-07-23 20:03 EDT and from Active to Review at 2026-07-23 20:11 EDT.
 
 ### Changed Files
 
@@ -385,8 +386,8 @@ Active at 2026-07-23 20:03 EDT. A draft pull request is pending.
 - Created `Assets/Minerva/Runtime/Core/ManualRuntimeClock.cs.meta`.
 - Created `Assets/Minerva/Tests/Runtime/Editor/ManualRuntimeClockTests.cs`.
 - Created `Assets/Minerva/Tests/Runtime/Editor/ManualRuntimeClockTests.cs.meta`.
-- Moved this ticket from `Docs/Tickets/Ready/` to
-  `Docs/Tickets/Active/`.
+- Moved this ticket from `Docs/Tickets/Ready/` through
+  `Docs/Tickets/Active/` to `Docs/Tickets/Review/`.
 
 ### Work Completed
 
@@ -452,8 +453,8 @@ Active at 2026-07-23 20:03 EDT. A draft pull request is pending.
   file was added.
 - Newline check: passed for every created text file and this ticket.
 - `git diff --check`: passed.
-- Workflow location check: passed for Active implementation; the ticket exists
-  only under `Docs/Tickets/Active/` with matching Status.
+- Workflow location check: passed; the ticket exists only under
+  `Docs/Tickets/Review/` with matching Status.
 - Authorized-path check: passed; all changes are limited to new approved Core
   runtime files, one new approved runtime test fixture, their metadata, and
   this ticket lifecycle/report update.
@@ -529,5 +530,5 @@ Use YYYY-MM-DD HH:mm z in America/New_York.
 |---|---|---|---|
 | Planned | 2026-07-23 17:58 EDT | Technical Director | Readiness pass completed against accepted FND-004 composition contracts and tests; promotion change prepared. |
 | In Progress | 2026-07-23 20:03 EDT | Codex | Began implementation on `agent/fnd-005-core-clock-abstractions` from merged PR #13 (`642d84c`); ticket moved from Ready to Active. |
-| Committed |  |  |  |
-| Verified |  |  |  |
+| Committed | 2026-07-23 20:10 EDT | Codex | Commit `eb73442006a3fb4df043cc3b344df67cff85713c` contains the validated implementation and Active ticket report. |
+| Verified | 2026-07-23 20:11 EDT | Codex | Draft PR #14 opened against `main`; base is merged PR #13 (`642d84c`) and implementation head is `eb73442`. Ticket moved from Active to Review. |
