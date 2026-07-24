@@ -658,6 +658,39 @@ Unity tests: Executed by the Local Unity Verification Operator in this session
   every GUID is unique under `Assets/`.
 - Newline audit: passed for every new text file.
 
+IRA-requested correction validation:
+
+- Reviewed head:
+  `44ece7942e7887a0dd6733452adbf8df479e4b9c`.
+- Corrected implementation head:
+  `534c0d001b6b73304b1d8229c0b12ac27b85ae48`.
+- Added one deterministic Unity 5.6-compatible focused EditMode test for a
+  rollback callback that throws after an apply failure.
+- The test proves that restore contains the rollback exception, preserves the
+  original apply failure as primary, emits a detached rollback diagnostic with
+  the correct phase, identity, exception type, and exception message, continues
+  reverse rollback and release cleanup in order, restores idle state, and
+  permits a subsequent capture on the same coordinator.
+- `./Tools/Verification/unity56-preflight.sh`: passed on the corrected head.
+- `./Tools/Verification/verify-unity56-editmode.sh`: passed on the corrected
+  head.
+- Unity version: 5.6.7f1.
+- Import and compilation: passed, exit code `0`.
+- Complete EditMode suite: 119 total, 119 passed, 586 assertions, 0 failed,
+  0 skipped, and 0 inconclusive.
+- Focused fixture: 24 FND-008 tests.
+- Known warnings: 2 UnityShaderCompiler socket warnings, 1 callback
+  unregistration warning, and 1 `ms_Instance` shutdown assertion.
+- Unknown blocking errors or exceptions: 0.
+- Repository integrity: tracked files and committed metadata remained
+  unchanged, generated paths were safely cleaned, and the working tree was
+  restored clean.
+- `git diff --check`: passed.
+- Evidence:
+  `/private/tmp/project-minerva-unity/verification.bwg6JL/verification-summary.md`.
+- Scope audit: only the existing focused FND-008 test fixture and this Review
+  ticket changed; production files were unchanged.
+
 ### Deviations
 
 None.
@@ -680,17 +713,32 @@ Completed by the independent reviewer while the ticket is in `Review`.
 
 ### Reviewer
 
+Independent Implementation Review Agent.
+
 ### Reviewed PR and Head
+
+PR #21 at
+`44ece7942e7887a0dd6733452adbf8df479e4b9c`.
 
 ### Scope and Acceptance Findings
 
+The implementation otherwise remained within the approved FND-008 scope, but
+the focused fixture did not exercise the required rollback-callback exception
+path after an apply failure.
+
 ### Validation Assessment
+
+Revision required before acceptance.
 
 ### Blocking Findings
 
+Add a focused EditMode test proving rollback exception isolation, detached
+diagnostics, continued reverse rollback and release cleanup, idle restoration,
+and subsequent coordinator reuse.
+
 ### Recommendation
 
-`Accept`, `Changes Required`, or `Blocked`.
+Changes Required.
 
 ## Technical Director Acceptance
 
@@ -722,3 +770,6 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 | In Progress | 2026-07-24 01:42 EDT | Codex | Began implementation on `agent/fnd-008-save-snapshot-contracts` from merged PR #20 (`4dd2082`). Repository editing, Unity 5.6.7f1, and Unity-backed C# compilation are available locally; mandatory validation is assigned to the Local Unity Verification Operator in this session. |
 | Committed | 2026-07-24 01:49 EDT | Codex | Commit `2af88077e106386fa5087bb257c8ed91adbecaad` contains the FND-008 implementation, focused tests, stable metadata, and Active ticket state. |
 | Verified | 2026-07-24 01:53 EDT | Codex | Draft PR #21 opened against `main`; Unity 5.6.7f1 import/compile and the complete 118-test, 564-assertion EditMode suite passed at implementation head `2af88077`; static scope, metadata, prohibited API, newline, and diff audits passed. |
+| Changes Requested | 2026-07-24 | Independent Implementation Review Agent | Review of PR #21 at `44ece794` required focused coverage for a rollback callback that throws after an apply failure. |
+| Corrected | 2026-07-24 02:37 EDT | Codex | Commit `534c0d001b6b73304b1d8229c0b12ac27b85ae48` adds the missing focused rollback-exception test without changing production files. |
+| Verified | 2026-07-24 02:37 EDT | Codex | Unity 5.6.7f1 import/compile and the complete 119-test, 586-assertion EditMode suite passed at corrected head `534c0d00`; repository restoration, metadata integrity, warning classification, and `git diff --check` passed. |
