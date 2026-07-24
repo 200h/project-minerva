@@ -1,6 +1,6 @@
 # FND-006: Create Scheduled Task Queue
 
-**Status:** Active
+**Status:** Review
 **Owner:** Codex
 **Created:** 2026-07-23  
 **Updated:** 2026-07-23  
@@ -448,9 +448,9 @@ Stop and report before implementation when:
 
 ### Status
 
-Implementation and required validation are complete on
-`agent/fnd-006-scheduled-task-queue`. The ticket remains Active until the draft
-implementation pull request opens.
+Implementation and required validation are complete. Draft pull request #16 is
+open against `main` for independent review at implementation head
+`3032727f14a878464061e575591277f1ce53f52d`.
 
 ### Changed Files
 
@@ -470,8 +470,8 @@ implementation pull request opens.
 - Created `Assets/Minerva/Runtime/Core/ScheduledTaskQueue.cs.meta`.
 - Created `Assets/Minerva/Tests/Runtime/Editor/ScheduledTaskQueueTests.cs`.
 - Created `Assets/Minerva/Tests/Runtime/Editor/ScheduledTaskQueueTests.cs.meta`.
-- Moved this ticket from `Docs/Tickets/Ready/` to
-  `Docs/Tickets/Active/`.
+- Moved this ticket from `Docs/Tickets/Ready/` through
+  `Docs/Tickets/Active/` to `Docs/Tickets/Review/`.
 
 ### Work Completed
 
@@ -590,5 +590,5 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 | Planned | 2026-07-23 20:43 EDT | Technical Director | FND-006 readiness and promotion authorized after merged FND-005. |
 | In Progress | 2026-07-23 20:43 EDT | Technical Director | Readiness pass defined queue contracts, lifecycle, drain boundaries, and validation scope. |
 | Active | 2026-07-23 21:03 EDT | Codex | Implementation began on `agent/fnd-006-scheduled-task-queue` from merge commit `8915c623f50cd42a41245c3bc0d3eec011bfccea`. |
-| Committed |  |  |  |
-| Verified |  |  |  |
+| Committed | 2026-07-23 21:15 EDT | Codex | Commit `3032727f14a878464061e575591277f1ce53f52d` contains the validated implementation and Active ticket report. |
+| Verified | 2026-07-23 21:16 EDT | Codex | Draft PR #16 opened against `main`; base is merged PR #15 (`8915c62`) and implementation head is `3032727`. Ticket moved from Active to Review. |
