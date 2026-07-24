@@ -544,6 +544,100 @@ namespace Minerva.Tests.Runtime
         }
 
         [Test]
+        public void RollbackException_IsDiagnosedWithoutReplacingApplyFailureOrStoppingCleanup()
+        {
+            List<string> calls = new List<string>();
+            RecordingContributor first =
+                Contributor("owner", "first", 1, calls);
+            RecordingContributor second =
+                Contributor("owner", "second", 1, calls);
+            RecordingContributor third =
+                Contributor("owner", "third", 1, calls);
+            RecordingOperation firstOperation =
+                new RecordingOperation("first", calls);
+            RecordingOperation secondOperation =
+                new RecordingOperation("second", calls);
+            RecordingOperation thirdOperation =
+                new RecordingOperation("third", calls);
+            InvalidOperationException rollbackException =
+                new InvalidOperationException("rollback exception");
+            secondOperation.ApplyResult =
+                RuntimeSnapshotStepResult.Failure("primary apply failure");
+            secondOperation.RollbackException = rollbackException;
+            first.Operation = firstOperation;
+            second.Operation = secondOperation;
+            third.Operation = thirdOperation;
+            RuntimeSnapshotCoordinator coordinator =
+                Coordinator(first, second, third);
+
+            RuntimeSnapshotRestoreResult result =
+                coordinator.Restore(ValidSnapshot(first, second, third));
+
+            Assert.IsFalse(result.IsSuccessful);
+            Assert.AreEqual(
+                RuntimeSnapshotOperationPhase.Apply,
+                result.PrimaryFailure.Phase);
+            Assert.AreEqual(second.Identity, result.PrimaryFailure.Identity);
+            Assert.AreEqual(
+                "primary apply failure",
+                result.PrimaryFailure.FailureReason);
+            Assert.IsNull(result.PrimaryFailure.ExceptionType);
+            Assert.AreEqual(1, result.RollbackFailureCount);
+            RuntimeSnapshotDiagnostic rollbackFailure =
+                result.GetRollbackFailure(0);
+            Assert.AreEqual(
+                RuntimeSnapshotOperationPhase.Rollback,
+                rollbackFailure.Phase);
+            Assert.AreEqual(second.Identity, rollbackFailure.Identity);
+            Assert.AreEqual(
+                typeof(InvalidOperationException),
+                rollbackFailure.ExceptionType);
+            Assert.AreEqual(
+                rollbackException.Message,
+                rollbackFailure.FailureReason);
+            System.Reflection.FieldInfo[] diagnosticFields =
+                typeof(RuntimeSnapshotDiagnostic).GetFields(
+                    System.Reflection.BindingFlags.Instance
+                    | System.Reflection.BindingFlags.Public
+                    | System.Reflection.BindingFlags.NonPublic);
+            for (int index = 0; index < diagnosticFields.Length; index++)
+            {
+                Assert.IsFalse(
+                    typeof(Exception).IsAssignableFrom(
+                        diagnosticFields[index].FieldType),
+                    "Diagnostic field retains an exception object: "
+                        + diagnosticFields[index].Name);
+            }
+
+            Assert.AreEqual(1, firstOperation.RollbackCount);
+            Assert.AreEqual(1, secondOperation.RollbackCount);
+            Assert.AreEqual(0, thirdOperation.RollbackCount);
+            Assert.AreEqual(1, firstOperation.ReleaseCount);
+            Assert.AreEqual(1, secondOperation.ReleaseCount);
+            Assert.AreEqual(1, thirdOperation.ReleaseCount);
+            CollectionAssert.AreEqual(
+                new string[]
+                {
+                    "prepare:first",
+                    "prepare:second",
+                    "prepare:third",
+                    "apply:first",
+                    "apply:second",
+                    "rollback:second",
+                    "rollback:first",
+                    "release:third",
+                    "release:second",
+                    "release:first"
+                },
+                calls);
+
+            RuntimeSnapshotCaptureResult subsequentCapture =
+                coordinator.Capture();
+
+            Assert.IsTrue(subsequentCapture.IsSuccessful);
+        }
+
+        [Test]
         public void SuccessfulApply_WithReleaseFailureReportsFailureWithoutRollback()
         {
             List<string> calls = new List<string>();
@@ -991,6 +1085,8 @@ namespace Minerva.Tests.Runtime
 
             public Exception ApplyException { get; set; }
 
+            public Exception RollbackException { get; set; }
+
             public Exception ReleaseException { get; set; }
 
             protected override RuntimeSnapshotStepResult ApplyCore()
@@ -1017,6 +1113,11 @@ namespace Minerva.Tests.Runtime
                 if (RollbackAction != null)
                 {
                     RollbackAction();
+                }
+
+                if (RollbackException != null)
+                {
+                    throw RollbackException;
                 }
 
                 return RollbackResult;

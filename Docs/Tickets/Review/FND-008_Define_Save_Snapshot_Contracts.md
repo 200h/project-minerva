@@ -608,9 +608,13 @@ pending independent review and Technical Director acceptance.
   retaining exceptions, delegates, participants, operations, or payloads.
 - Added same-coordinator capture/restore reentrancy rejection with
   finally-equivalent idle restoration and independent coordinator isolation.
-- Added one focused fixture containing 23 tests across identity, capture,
+- Added one focused fixture containing 24 tests across identity, capture,
   structural validation, preparation, apply, rollback, release, failures,
   reentrancy, composition coexistence, and isolation.
+- Added the IRA-requested rollback-exception coverage proving that a thrown
+  rollback callback is diagnosed without escaping restore or replacing the
+  primary apply failure, while reverse rollback and release cleanup continue
+  and the coordinator returns to a reusable idle state.
 
 ### Validation
 
@@ -632,7 +636,7 @@ Unity tests: Executed by the Local Unity Verification Operator in this session
 - Import and compilation: passed, exit code `0`.
 - Complete EditMode suite: 118 total, 118 passed, 564 assertions, 0 failed,
   0 skipped, and 0 inconclusive.
-- Focused fixture: 23 FND-008 tests.
+- Focused fixture: 24 FND-008 tests after the IRA-requested correction.
 - Known warnings: 2 UnityShaderCompiler socket warnings, 1 callback
   unregistration warning, and 1 `ms_Instance` shutdown assertion.
 - Unknown blocking errors or exceptions: 0.
