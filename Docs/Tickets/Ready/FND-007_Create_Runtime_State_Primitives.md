@@ -133,10 +133,11 @@ Use narrow exact-symbol searches only when required to locate a direct accepted 
 
 The implementation must expose small XML-documented contracts equivalent to:
 
-- `RuntimeStateIdentity`, an immutable owner-qualified stable identity;
+- `RuntimeStateIdentity`, a sealed immutable owner-qualified stable identity;
 - `IRuntimeState<T>`, a read capability exposing `Identity` and `Value`;
 - `IRuntimeStateMutator<T>`, a mutation capability exposing `TrySet(T proposedValue)`;
-- `IRuntimeStateValidator<T>`, a validator receiving identity, current value, and proposed value and returning an immutable validation result;
+- `RuntimeStateValidationContext<T>`, an immutable context containing identity, proposed value, and whether a current value exists;
+- `IRuntimeStateValidator<T>`, a validator receiving that context and returning an immutable validation result;
 - `RuntimeStateValidationResult`, representing accepted or rejected validation with an actionable rejection reason;
 - `RuntimeStateMutationStatus` with exactly the semantic outcomes `Changed`, `Unchanged`, and `Rejected`;
 - `RuntimeStateChange<T>`, an immutable completed-change record implementing `IEvent`;
@@ -169,6 +170,7 @@ The API must not expose:
 - A null event publisher disables completed-change publication for that cell.
 - The comparer, validator, and publisher choices are fixed for the cell lifetime.
 - The initial value is validated when a validator is supplied.
+- Initial validation receives a context with `HasCurrentValue == false`, `CurrentValue == default(T)`, and `ProposedValue` equal to the initial value.
 - Rejected initial state throws `ArgumentException` with the validator's actionable reason and creates no usable capabilities.
 - Exceptions thrown by the validator during initial validation propagate and create no usable capabilities.
 - Structural argument failures occur before any usable cell or capability is returned.
@@ -186,7 +188,7 @@ The API must not expose:
   - do not replace the stored value;
   - do not create a change record;
   - do not publish an event.
-- When values differ and a validator exists, call it exactly once with identity, current value, and proposed value.
+- When values differ and a validator exists, call it exactly once with a context whose identity is the cell identity, `HasCurrentValue == true`, `CurrentValue` is the authoritative stored value, and `ProposedValue` is the requested value.
 - A validator rejection:
   - returns `Rejected`;
   - retains the current value;
@@ -256,6 +258,7 @@ The API must not expose:
   - no publication result or publication-failure diagnostic exists.
 - Invalid combinations must not be publicly constructible.
 - `RuntimeStateChange<T>` is immutable by API. It retains the supplied values without cloning, so callers must use values that are themselves treated as immutable.
+- `RuntimeStateValidationContext<T>` is immutable by API. During initial validation `CurrentValue` returns `default(T)` and callers must inspect `HasCurrentValue` before assigning transition meaning to it.
 - Results and changes expose no mutable internal collections, delegates, validator references, comparer references, or state-cell implementation references.
 
 ## Lifecycle, Composition, and Threading
@@ -291,6 +294,7 @@ The API must not expose:
 - Add the approved immutable owner-qualified identity contract under `Minerva.Core`.
 - Add separate generic read and mutation capability interfaces.
 - Add the generic validator and immutable validation-result contracts.
+- Add the immutable generic validation-context contract used for initial and mutation validation.
 - Add the exact semantic mutation-status outcomes.
 - Add immutable generic completed-change and mutation-result contracts.
 - Add an immutable publication-failure diagnostic when publication throws.
@@ -386,6 +390,7 @@ Expected new production files under `Assets/Minerva/Runtime/Core/`, with stable 
 - `IRuntimeState.cs` or a clearer generic read-capability equivalent
 - `IRuntimeStateMutator.cs` or a clearer generic mutation-capability equivalent
 - `IRuntimeStateValidator.cs`
+- `RuntimeStateValidationContext.cs`
 - `RuntimeStateValidationResult.cs`
 - `RuntimeStateMutationStatus.cs`
 - `RuntimeStateChange.cs`
@@ -444,6 +449,7 @@ State mutation is authoritative before publication. Event failures are diagnosti
 - [ ] Equality is deterministic through a fixed comparer, with `EqualityComparer<T>.Default` as the default.
 - [ ] Equal proposed values return `Unchanged`, skip validation, retain the original stored value, and publish nothing.
 - [ ] Differing proposed values invoke the validator exactly once when configured.
+- [ ] Initial validation uses an explicit context with no current value; mutation validation uses an explicit context with the authoritative current value.
 - [ ] Rejected validation returns an actionable immutable result, preserves state, creates no change, and publishes nothing.
 - [ ] Validator exceptions propagate without state mutation.
 - [ ] Applied mutations update state exactly once and return one immutable completed-change record with identity, previous value, and current value.
@@ -477,6 +483,7 @@ State mutation is authoritative before publication. Event failures are diagnosti
   - read and mutation capability behavior;
   - default comparer and custom comparer behavior;
   - initial-value validation;
+  - initial versus mutation validation-context behavior;
   - null/default acceptance and validator rejection;
   - unchanged mutation skipping validation and publication;
   - accepted mutation and immutable change contents;
