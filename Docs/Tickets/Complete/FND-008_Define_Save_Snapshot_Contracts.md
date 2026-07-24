@@ -1,6 +1,6 @@
 # FND-008: Define Save Snapshot Contracts
 
-**Status:** Review
+**Status:** Complete
 **Owner:** Codex
 **Created:** 2026-07-23  
 **Updated:** 2026-07-24  
@@ -433,33 +433,33 @@ FND-008 is the last ticket in the Foundation Runtime Services epic. It must leav
 
 ## Acceptance Criteria
 
-- [ ] Contribution identity is immutable, owner-qualified, ordinal, case-sensitive, and rejects invalid identifiers.
-- [ ] Schema versions are explicit positive integers and contributor compatibility is owner-controlled.
-- [ ] Snapshot data is owner-defined, immutable by contract, detached, and format-agnostic.
-- [ ] Contribution and aggregate snapshot records expose no externally mutable collections.
-- [ ] Construction rejects null contributors and duplicate identities atomically.
-- [ ] Capture order exactly matches contributor registration order.
-- [ ] Capture rejects null, mismatched, invalid, failed, or throwing contributor output with actionable diagnostics and no successful partial snapshot.
-- [ ] Structural restore validation rejects null, duplicate, missing, unknown, or invalid contributions before any contributor preparation.
-- [ ] Preparation follows registration order and completes for every contributor before apply begins.
-- [ ] Preparation failure releases prior operations in reverse order without rollback or authoritative mutation.
-- [ ] Apply follows registration order and attempts each operation at most once.
-- [ ] Apply failure rolls back every attempted operation in reverse order, including the failing operation.
-- [ ] Prepared but unattempted operations are released without rollback.
-- [ ] Successful restore releases all operations in reverse order.
-- [ ] Primary, rollback, and release failures remain distinct, immutable, ordered, and actionable.
-- [ ] Contributor and operation exceptions do not escape coordinator capture or restore.
-- [ ] Same-coordinator capture/restore reentrancy is rejected without starting nested work, and idle state is restored after every path.
-- [ ] Separate coordinators share no mutable state.
-- [ ] The coordinator does not own contributor lifecycle or modify accepted composition contracts.
-- [ ] No file I/O, serialization format, migration, domain payload, event publication, automatic state enumeration, or global access is introduced.
-- [ ] New public contracts have XML documentation and remain Unity 5.6-compatible.
-- [ ] All new assets have committed stable metadata and unique GUIDs.
-- [ ] The full existing EditMode suite plus the new focused tests passes through the accepted Unity verifier.
-- [ ] The implementation changes only authorized paths.
-- [ ] The ticket exists in exactly one workflow directory and its `Status` matches that directory.
-- [ ] The implementation PR contains this ticket under `Docs/Tickets/Review/` while independent review is pending.
-- [ ] After acceptance, the implementation PR contains this ticket under `Docs/Tickets/Complete/` before merge.
+- [x] Contribution identity is immutable, owner-qualified, ordinal, case-sensitive, and rejects invalid identifiers.
+- [x] Schema versions are explicit positive integers and contributor compatibility is owner-controlled.
+- [x] Snapshot data is owner-defined, immutable by contract, detached, and format-agnostic.
+- [x] Contribution and aggregate snapshot records expose no externally mutable collections.
+- [x] Construction rejects null contributors and duplicate identities atomically.
+- [x] Capture order exactly matches contributor registration order.
+- [x] Capture rejects null, mismatched, invalid, failed, or throwing contributor output with actionable diagnostics and no successful partial snapshot.
+- [x] Structural restore validation rejects null, duplicate, missing, unknown, or invalid contributions before any contributor preparation.
+- [x] Preparation follows registration order and completes for every contributor before apply begins.
+- [x] Preparation failure releases prior operations in reverse order without rollback or authoritative mutation.
+- [x] Apply follows registration order and attempts each operation at most once.
+- [x] Apply failure rolls back every attempted operation in reverse order, including the failing operation.
+- [x] Prepared but unattempted operations are released without rollback.
+- [x] Successful restore releases all operations in reverse order.
+- [x] Primary, rollback, and release failures remain distinct, immutable, ordered, and actionable.
+- [x] Contributor and operation exceptions do not escape coordinator capture or restore.
+- [x] Same-coordinator capture/restore reentrancy is rejected without starting nested work, and idle state is restored after every path.
+- [x] Separate coordinators share no mutable state.
+- [x] The coordinator does not own contributor lifecycle or modify accepted composition contracts.
+- [x] No file I/O, serialization format, migration, domain payload, event publication, automatic state enumeration, or global access is introduced.
+- [x] New public contracts have XML documentation and remain Unity 5.6-compatible.
+- [x] All new assets have committed stable metadata and unique GUIDs.
+- [x] The full existing EditMode suite plus the new focused tests passes through the accepted Unity verifier.
+- [x] The implementation changes only authorized paths.
+- [x] The ticket exists in exactly one workflow directory and its `Status` matches that directory.
+- [x] The implementation PR contains this ticket under `Docs/Tickets/Review/` while independent review is pending.
+- [x] After acceptance, the implementation PR contains this ticket under `Docs/Tickets/Complete/` before merge.
 
 ## Required Validation
 
@@ -531,22 +531,22 @@ Cover at minimum:
 
 ## Definition of Done
 
-- [ ] Acceptance criteria satisfied.
-- [ ] Required local Unity validation completed on the exact PR head.
-- [ ] Full EditMode suite passes with exact evidence.
-- [ ] Focused snapshot tests cover success, failure, rollback, cleanup, reentrancy, and isolation.
-- [ ] Repository and metadata integrity are verified.
-- [ ] Documentation updated.
-- [ ] No unauthorized changes.
-- [ ] Implementation report completed.
+- [x] Acceptance criteria satisfied.
+- [x] Required local Unity validation completed on the exact PR head.
+- [x] Full EditMode suite passes with exact evidence.
+- [x] Focused snapshot tests cover success, failure, rollback, cleanup, reentrancy, and isolation.
+- [x] Repository and metadata integrity are verified.
+- [x] Documentation updated.
+- [x] No unauthorized changes.
+- [x] Implementation report completed.
 
 ## Implementation Report
 
 ### Status
 
-Implementation is complete on `agent/fnd-008-save-snapshot-contracts`.
-Draft PR #21 is open against `main`, and this ticket remains in `Review`
-pending independent review and Technical Director acceptance.
+Implementation and independent review are complete on
+`agent/fnd-008-save-snapshot-contracts`. PR #21 is open against `main`, and
+this ticket is `Complete` following Technical Director acceptance.
 
 ### Changed Files
 
@@ -709,7 +709,9 @@ None.
 
 ## Implementation Review Agent Record
 
-Completed by the independent reviewer while the ticket is in `Review`.
+Completed by the independent reviewer while the ticket was in `Review`.
+
+### Initial Review — Changes Required
 
 ### Reviewer
 
@@ -740,25 +742,81 @@ and subsequent coordinator reuse.
 
 Changes Required.
 
+### Final Re-review — Accept
+
+#### Reviewer
+
+Independent Implementation Review Agent.
+
+#### Reviewed PR and Head
+
+PR #21 at
+`3c1e10f09230382904804b546e0ea062ed18aa6c`.
+
+#### Scope and Acceptance Findings
+
+The prior rollback-exception finding is resolved by
+`RollbackException_IsDiagnosedWithoutReplacingApplyFailureOrStoppingCleanup`.
+The focused test proves that a thrown rollback exception remains contained,
+the original apply failure remains primary, detached rollback diagnostics
+retain the correct phase, identity, exception type, and message, reverse
+rollback and release cleanup continue deterministically, coordinator idle state
+is restored, and a subsequent operation succeeds.
+
+The correction changed only the focused FND-008 test fixture and this ticket's
+Review evidence. No production file changed. All previously satisfied FND-008
+acceptance findings remain satisfied, with no new blockers, regressions, or
+unauthorized scope.
+
+#### Validation Assessment
+
+Accepted. Unity 5.6.7f1 import and compilation passed. The complete EditMode
+suite passed 119 of 119 tests with 586 assertions, 0 failures, 0 skipped tests,
+and 0 inconclusive tests. Known warnings were classified, unknown blocking
+errors were 0, tracked and committed metadata integrity passed, the repository
+returned clean, and `git diff --check` passed.
+
+#### Blocking Findings
+
+None.
+
+#### Recommendation
+
+Accept for Technical Director consideration.
+
 ## Technical Director Acceptance
 
 Completed after reviewing the Implementation Review Agent recommendation and before merge.
 
 ### Decision
 
-`Accepted`, `Changes Required`, or `Blocked`.
+Accepted.
 
 ### PR Reference
 
+PR #21 at the exact IRA-accepted head
+`3c1e10f09230382904804b546e0ea062ed18aa6c`.
+
 ### Acceptance Date
 
-Use `YYYY-MM-DD` in `America/New_York`.
+2026-07-24
 
 ### Final Validation Decision
 
+Accepted. The final independent review resolved the earlier Revise cycle and
+found no blocking findings, regressions, or unauthorized scope. Exact-head
+Unity 5.6.7f1 validation passed 119 of 119 EditMode tests with 586 assertions,
+0 failures, 0 skipped tests, and 0 inconclusive tests. Known warnings were
+classified, unknown blocking errors were 0, repository and metadata integrity
+passed, the worktree returned clean, and `git diff --check` passed.
+
 ### Accepted Deviations
 
+None.
+
 ### Follow-Up Tickets
+
+None.
 
 ## Execution State Log
 
@@ -773,3 +831,5 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 | Changes Requested | 2026-07-24 | Independent Implementation Review Agent | Review of PR #21 at `44ece794` required focused coverage for a rollback callback that throws after an apply failure. |
 | Corrected | 2026-07-24 02:37 EDT | Codex | Commit `534c0d001b6b73304b1d8229c0b12ac27b85ae48` adds the missing focused rollback-exception test without changing production files. |
 | Verified | 2026-07-24 02:37 EDT | Codex | Unity 5.6.7f1 import/compile and the complete 119-test, 586-assertion EditMode suite passed at corrected head `534c0d00`; repository restoration, metadata integrity, warning classification, and `git diff --check` passed. |
+| Reviewed | 2026-07-24 03:10 EDT | Independent Implementation Review Agent | Re-reviewed PR #21 at exact head `3c1e10f09230382904804b546e0ea062ed18aa6c`; prior rollback-exception finding resolved; recommendation: Accept; no new blockers, regressions, or unauthorized scope. |
+| Accepted | 2026-07-24 03:14 EDT | Technical Director | Accepted the final IRA recommendation; FND-008 approved as Complete and ready for Repository Owner merge. |
