@@ -1,10 +1,10 @@
 # Testing Strategy
 
-**Version:** 1.0  
-**Status:** Draft  
-**Owner:** Technical Director  
-**Last Updated:** 2026-07-21  
-**Related Documents:** [`Definition_of_Done.md`](Definition_of_Done.md), [`../Project/CODING_STANDARDS.md`](../Project/CODING_STANDARDS.md)
+**Version:** 1.1
+**Status:** Draft
+**Owner:** Technical Director
+**Last Updated:** 2026-07-24
+**Related Documents:** [`Definition_of_Done.md`](Definition_of_Done.md), [`../Project/CODING_STANDARDS.md`](../Project/CODING_STANDARDS.md), [`../Runbooks/UNITY_5_6_VALIDATION.md`](../Runbooks/UNITY_5_6_VALIDATION.md), [`../Process/UNITY_EXECUTION_MODEL.md`](../Process/UNITY_EXECUTION_MODEL.md)
 
 ## Purpose
 
@@ -61,6 +61,18 @@ Implementation reports must distinguish:
 - checks run and failed;
 - checks unavailable in the environment;
 - checks recommended but outside scope.
+
+## Local Unity 5.6 Verification
+
+Unity runtime code, EditMode tests, editor tooling, scenes, prefabs, and imported assets require validation in an environment with the approved Unity version. Cloud repository access does not establish that capability.
+
+The standard local EditMode workflow is:
+
+```bash
+./Tools/Verification/verify-unity56-editmode.sh
+```
+
+Follow the [Unity 5.6 Validation Runbook](../Runbooks/UNITY_5_6_VALIDATION.md). Acceptance requires the ticket-defined validation evidence. For automated EditMode tests, the results XML—not the Unity process exit code alone—is authoritative.
 
 ## Regression Policy
 

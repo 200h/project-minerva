@@ -1,10 +1,10 @@
 # Project Minerva — AI Engineering Guide
 
-**Version:** 1.1  
-**Status:** Draft  
-**Owner:** Technical Director  
-**Last Updated:** 2026-07-23  
-**Related Documents:** [`README.md`](README.md), [`ARCHITECTURAL_PRINCIPLES.md`](ARCHITECTURAL_PRINCIPLES.md), [`ENGINEERING_PHILOSOPHY.md`](ENGINEERING_PHILOSOPHY.md), [`GLOSSARY.md`](GLOSSARY.md), [`../Handbook/Ticket_Workflow.md`](../Handbook/Ticket_Workflow.md), [`../Templates/Ticket_Template.md`](../Templates/Ticket_Template.md)
+**Version:** 1.2
+**Status:** Draft
+**Owner:** Technical Director
+**Last Updated:** 2026-07-24
+**Related Documents:** [`README.md`](README.md), [`ARCHITECTURAL_PRINCIPLES.md`](ARCHITECTURAL_PRINCIPLES.md), [`ENGINEERING_PHILOSOPHY.md`](ENGINEERING_PHILOSOPHY.md), [`GLOSSARY.md`](GLOSSARY.md), [`../Handbook/Ticket_Workflow.md`](../Handbook/Ticket_Workflow.md), [`../Templates/Ticket_Template.md`](../Templates/Ticket_Template.md), [`../Process/UNITY_EXECUTION_MODEL.md`](../Process/UNITY_EXECUTION_MODEL.md), [`../Runbooks/UNITY_5_6_VALIDATION.md`](../Runbooks/UNITY_5_6_VALIDATION.md)
 
 ## Purpose
 
@@ -53,6 +53,12 @@ The Implementation Review Agent does not redesign requirements, implement fixes,
 Performs a narrowly authorized repository mutation when the normal execution path is unavailable or inappropriate. This is an operational role, not an implementation-review role.
 
 A maintenance operator may move or update an accepted ticket, correct metadata, or perform another explicitly bounded repository action. The operator must not reinterpret the acceptance decision or expand the authorized change.
+
+### Local Unity Verification Operator
+
+The Local Unity Verification Operator validates an exact pull-request head with the locally installed Unity editor. The operator runs the approved preflight and verification scripts, preserves evidence, and reports failures without silently changing implementation.
+
+The operator does not redesign the solution, accept the implementation, move a ticket to `Complete`, or merge a pull request. See the [Unity Execution Model](../Process/UNITY_EXECUTION_MODEL.md).
 
 ## Governing Rule
 
@@ -210,6 +216,22 @@ Do not assume availability of:
 - modern platform lifecycle helpers.
 
 When uncertain, verify against project-local compatibility documentation or report the uncertainty. Do not silently use a newer API because it is common in contemporary examples.
+
+### Unity Execution Capability
+
+Repository editing, C# compilation, and Unity execution are separate capabilities. Before beginning a Unity-related ticket, the implementation handoff must declare:
+
+```text
+Implementation environment:
+Unity execution environment:
+Unity version:
+Unity executable:
+Validation responsibility:
+```
+
+The implementation agent reports whether repository editing, a C# compiler, Unity 5.6.7f1, and Unity tests are available in its environment. When Unity is unavailable, record Unity validation as pending and route it to the Local Unity Verification Operator. Do not describe unavailable execution as a compilation or test failure.
+
+Local validation follows the [Unity 5.6 Validation Runbook](../Runbooks/UNITY_5_6_VALIDATION.md). A Unity exit code alone is not test evidence; the required results XML is authoritative.
 
 ## Dependency Guardrails
 
