@@ -110,6 +110,15 @@ if [ -n "${PROJECT_PATH}" ] && [ "${MINERVA_MOCK_MODE:-pass}" = "unexpected" ]; 
     printf 'preserve me\n' > "${PROJECT_PATH}/unexpected-generated.txt"
 fi
 
+if [ -n "${PROJECT_PATH}" ] && [ "${MINERVA_MOCK_MODE:-pass}" = "unknown_project_settings" ]; then
+    mkdir -p "${PROJECT_PATH}/ProjectSettings"
+    printf 'preserve me\n' > "${PROJECT_PATH}/ProjectSettings/do-not-delete.txt"
+fi
+
+if [ "${RUN_TESTS}" -eq 1 ] && [ "${MINERVA_MOCK_MODE:-pass}" = "unknown_error" ]; then
+    printf 'Error: synthetic native failure\n' >> "${LOG_FILE}"
+fi
+
 exit 0
 EOF
 chmod +x "${FAKE_UNITY}"
@@ -168,6 +177,23 @@ fi
 rm -f "${REPOSITORY}/unexpected-generated.txt"
 rm -f "${REPOSITORY}/Assets/Minerva.meta"
 rm -rf "${REPOSITORY}/ProjectSettings"
+
+expect_exit 60 env ${COMMON_ENV} MINERVA_MOCK_MODE=unknown_project_settings \
+    "${VERIFICATION_DIR}/verify-unity56-editmode.sh"
+if [ ! -f "${REPOSITORY}/ProjectSettings/do-not-delete.txt" ]; then
+    record_failure "unknown ProjectSettings content was deleted"
+fi
+rm -f "${REPOSITORY}/Assets/Minerva.meta"
+rm -rf "${REPOSITORY}/ProjectSettings"
+
+expect_exit 50 env ${COMMON_ENV} MINERVA_MOCK_MODE=unknown_error \
+    "${VERIFICATION_DIR}/verify-unity56-editmode.sh"
+if [ -n "$(git -C "${REPOSITORY}" status --porcelain=v1 --untracked-files=all)" ]; then
+    record_failure "unknown-error verification did not restore allowlisted generated content"
+fi
+if ! grep -Rqs 'Error: synthetic native failure' "${EVIDENCE_ROOT}"; then
+    record_failure "unknown-error evidence did not preserve the blocking log line"
+fi
 
 WORKTREE_OUTPUT="$(
     MINERVA_PROJECT_ROOT="${REPOSITORY}" \

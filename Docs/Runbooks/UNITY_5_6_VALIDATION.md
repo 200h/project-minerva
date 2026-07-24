@@ -145,11 +145,13 @@ The verifier may remove only generated paths that:
 - did not exist before the run;
 - are reported by Git as untracked;
 - match an approved classification:
-  - `ProjectSettings/**`;
+  - one of the explicitly listed Unity 5.6.7f1 default `ProjectSettings` files encoded in the verifier;
   - `Assets/Minerva.meta` when `Assets/Minerva/` exists;
   - an untracked `Assets/Minerva/**/*.meta` whose paired path is an existing directory.
 
 Unexpected untracked content is preserved and causes validation to fail. Tracked changes are preserved and cause validation to fail.
+
+The `ProjectSettings` rule is intentionally file-specific. A new or unknown file under that directory is preserved and blocks cleanup until a reviewed tooling change classifies it.
 
 Never use:
 

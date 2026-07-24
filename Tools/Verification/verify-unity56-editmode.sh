@@ -296,6 +296,8 @@ patterns = (
     re.compile(r"\bUnhandled Exception\b", re.I),
     re.compile(r"^\s*[A-Za-z0-9_.]+Exception\s*:", re.I),
     re.compile(r"^\s*Assertion failed on expression:", re.I),
+    re.compile(r"^\s*(?:\[[^\]]+\]\s*)?(?:fatal\s+error|error)\b", re.I),
+    re.compile(r"^\s*.*\b(?:native|internal)\s+error\b", re.I),
 )
 
 findings = []
@@ -338,6 +340,24 @@ untracked = []
 tracked_changes = []
 unexpected = []
 allowed = []
+allowed_project_settings = {
+    "ProjectSettings/AudioManager.asset",
+    "ProjectSettings/ClusterInputManager.asset",
+    "ProjectSettings/DynamicsManager.asset",
+    "ProjectSettings/EditorBuildSettings.asset",
+    "ProjectSettings/EditorSettings.asset",
+    "ProjectSettings/GraphicsSettings.asset",
+    "ProjectSettings/InputManager.asset",
+    "ProjectSettings/NavMeshAreas.asset",
+    "ProjectSettings/NetworkManager.asset",
+    "ProjectSettings/Physics2DSettings.asset",
+    "ProjectSettings/ProjectSettings.asset",
+    "ProjectSettings/ProjectVersion.txt",
+    "ProjectSettings/QualitySettings.asset",
+    "ProjectSettings/TagManager.asset",
+    "ProjectSettings/TimeManager.asset",
+    "ProjectSettings/UnityConnectSettings.asset",
+}
 
 for entry in entries:
     if not entry:
@@ -349,7 +369,7 @@ for entry in entries:
         continue
     untracked.append(path)
     absolute = os.path.join(root, path)
-    if path == "ProjectSettings/" or path.startswith("ProjectSettings/"):
+    if path in allowed_project_settings:
         allowed.append(path)
     elif path == "Assets/Minerva.meta" and os.path.isdir(os.path.join(root, "Assets/Minerva")):
         allowed.append(path)

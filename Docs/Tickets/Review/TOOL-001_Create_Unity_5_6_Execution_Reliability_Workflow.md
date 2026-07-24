@@ -263,6 +263,8 @@ Implementation complete. Independent review pending.
 - Mock harness: passed all scenarios.
 - Missing XML scenario: returned exit `41`, preserved evidence, and restored the mock repository.
 - Unexpected-path scenario: returned exit `60`, preserved the unexpected file, and refused cleanup until the harness removed its own fixture.
+- Unknown `ProjectSettings` scenario: returned exit `60` and preserved the unrecognized file.
+- Unknown-error scenario: returned exit `50`, preserved the generic Unity/native error evidence, and restored allowlisted generated content.
 - Worktree helper scenario: created a detached worktree and removed it only while clean, without force.
 - Real Unity validation:
   - branch: `tool/unity56-execution-reliability`
@@ -292,7 +294,7 @@ Implementation complete. Independent review pending.
 
 ### Blockers or Risks
 
-- No implementation blocker.
+- The initial IRA review required changes for broad `ProjectSettings` cleanup classification and narrow unknown-error detection. Both corrections and regression scenarios are included in the current review head; delta review is pending.
 - Known Unity 5.6 shutdown/environment warnings remain nonblocking only under the documented authoritative passing-XML conditions.
 
 ### Optional Context Used
