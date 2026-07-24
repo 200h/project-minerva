@@ -629,6 +629,31 @@ explicitly unverified for independent review.
 - Workflow-location audit: passed; this ticket exists only under
   `Docs/Tickets/Review/` with matching `Status`.
 
+#### Revalidation — 2026-07-23 22:21 EDT
+
+- Revalidated the complete PR #18 delta from merge base
+  `69ae2b3c08019d74a74b0fe5d28c04b78267439e` through implementation-report
+  head `ba9e416997aa9312c648de9d8e79a1eaf0e1be1b`.
+- Changed-path audit passed for all 29 paths: 28 new runtime/test assets and
+  metadata files plus this ticket's single `Ready` to `Review` move.
+- Accepted-file preservation passed: the delta adds new authorized assets and
+  moves this ticket; it does not modify an accepted production or test file.
+- Contract review passed without an implementation correction. The read
+  capability cannot be cast to the mutation capability, construction policies
+  remain fixed, equality precedes validation, accepted state becomes
+  authoritative before publication, and publisher failures cannot roll back
+  the value or retain exception objects.
+- The focused fixture still contains 23 authored tests and 110 authored
+  assertion sites. These counts describe source coverage only; they are not
+  represented as executed or passing tests.
+- Prohibited-symbol, forbidden-asset, metadata-presence, GUID-uniqueness,
+  final-newline, workflow-location, and `git diff --check` audits passed again.
+- Unity 5.6, Mono, Roslyn, `mcs`, `csc`, `msbuild`, and `dotnet` remain
+  unavailable. Unity import/compile and runtime EditMode execution therefore
+  remain explicitly unverified, with 0 tests executed locally and runtime
+  assertion/failure/skip/inconclusive totals unavailable.
+- No runtime or test change was required by revalidation.
+
 ### Deviations
 
 None.
@@ -695,5 +720,6 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 | Active | 2026-07-23 21:55 EDT | Codex | Began implementation on `agent/fnd-007-runtime-state-primitives` from merged PR #17 (`69ae2b3`). |
 | Committed | 2026-07-23 22:07 EDT | Codex | Commit `22c02589d26a30a297546e23121bc08c8c0898c9` contains the implementation and Active ticket state. |
 | Verified | 2026-07-23 22:08 EDT | Codex | Draft PR #18 opened against `main` at implementation head `22c02589d26a30a297546e23121bc08c8c0898c9`; local static audits passed and unavailable Unity validation is recorded. |
+| Verified | 2026-07-23 22:21 EDT | Codex | Revalidated PR #18 from merge base `69ae2b3` through head `ba9e416`; 29-path scope, accepted-file preservation, 23-test/110-assertion-site source coverage, prohibited-symbol, metadata, GUID, newline, workflow, and diff audits passed. Unity execution remains unavailable and unclaimed. |
 | Reviewed |  |  |  |
 | Accepted |  |  |  |
