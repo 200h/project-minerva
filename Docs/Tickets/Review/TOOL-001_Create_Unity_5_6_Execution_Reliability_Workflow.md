@@ -268,7 +268,7 @@ Implementation complete. Independent review pending.
 - Worktree helper scenario: created a detached worktree and removed it only while clean, without force.
 - Real Unity validation:
   - branch: `tool/unity56-execution-reliability`
-  - validated implementation SHA: `78a9906f2326f7ba044efc03e49b48faccd1a13d`
+  - validated implementation SHA after IRA-requested corrections: `551fa6362b49e44ba06e7065ba86716da53c9fcb`
   - Unity: `5.6.7f1`
   - import/compilation: passed, exit `0`
   - EditMode result: `Passed`, Unity exit `0`
@@ -283,7 +283,7 @@ Implementation complete. Independent review pending.
   - unknown blocking errors or exceptions: `0`
   - repository restored: yes
   - `git diff --check`: passed
-  - evidence: `/private/tmp/project-minerva-unity/verification.5CD3hN/verification-summary.md`
+  - evidence: `/private/tmp/project-minerva-unity/verification.0iEIhZ/verification-summary.md`
 - Broad cleanup audit: no `git clean` invocation or forced worktree removal exists in shell scripts.
 - Scope audit: no path under `Assets/`, `ProjectSettings/`, `Packages/`, or `Planning/` changed.
 
@@ -354,3 +354,6 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 | In Progress | 2026-07-24 00:09 EDT | Codex | Ticket moved to Active; implementation started on `tool/unity56-execution-reliability`. |
 | Committed | 2026-07-24 00:18 EDT | Codex | Implementation commits `2c8b871`, `14d790f`, and `78a9906` recorded on the tooling branch. |
 | Verified | 2026-07-24 00:21 EDT | Codex | Mock safety harness passed; real Unity 5.6.7f1 validation passed 95/95 tests and 412 assertions with the repository restored clean. |
+| In Progress | 2026-07-24 00:55 EDT | Codex | Addressed the IRA findings for fail-closed `ProjectSettings` cleanup and generic Unity/native error detection. |
+| Committed | 2026-07-24 00:58 EDT | Codex | IRA-requested corrections committed as `551fa63`. |
+| Verified | 2026-07-24 00:59 EDT | Codex | Expanded regression harness passed; real Unity revalidation at `551fa63` passed 95/95 tests and 412 assertions with the repository restored clean. |
