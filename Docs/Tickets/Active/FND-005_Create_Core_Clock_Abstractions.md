@@ -1,7 +1,7 @@
 # FND-005: Create Core Clock Abstractions
 
-**Status:** Ready  
-**Owner:** Unassigned  
+**Status:** Active
+**Owner:** Codex
 **Created:** 2026-07-23  
 **Updated:** 2026-07-23  
 **Roadmap Phase:** Phase 1 — Foundation  
@@ -368,24 +368,117 @@ Stop and report rather than guessing when:
 
 ### Status
 
+Implementation and validation are complete. The ticket moved from Ready to
+Active at 2026-07-23 20:03 EDT. A draft pull request is pending.
+
 ### Changed Files
+
+- Created `Assets/Minerva/Runtime/Core/RuntimeInstant.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeInstant.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeDuration.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeDuration.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeClock.cs`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeClock.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeClockControl.cs`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeClockControl.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/ManualRuntimeClock.cs`.
+- Created `Assets/Minerva/Runtime/Core/ManualRuntimeClock.cs.meta`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/ManualRuntimeClockTests.cs`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/ManualRuntimeClockTests.cs.meta`.
+- Moved this ticket from `Docs/Tickets/Ready/` to
+  `Docs/Tickets/Active/`.
 
 ### Work Completed
 
+- Added distinct immutable elapsed timestamp and duration value types using
+  exact nonnegative signed 64-bit integer milliseconds.
+- Added separate read-only and mutation-control clock contracts.
+- Added a sealed, instance-owned, manually advanced clock that participates in
+  the accepted runtime-service lifecycle without automatic advancement or
+  external clock dependencies.
+- Added one focused EditMode fixture covering value semantics, exact and paused
+  advancement, overflow atomicity, lifecycle behavior, composition ownership,
+  and instance isolation.
+
 ### Time Representation and Boundary Behavior
+
+- `RuntimeInstant` and `RuntimeDuration` expose exact millisecond values, zero
+  constants, equality, inequality, ordering, comparison, and stable hash
+  behavior.
+- Both value constructors reject negative milliseconds with
+  `ArgumentOutOfRangeException`.
+- Running advancement performs an explicit pre-addition boundary check.
+  Overflow throws `OverflowException` before assignment, leaving current time
+  unchanged.
+- Zero advancement is an idempotent no-op. No subtraction, reset, rewind,
+  clamping, wrapping, or wall-clock conversion API is exposed.
 
 ### Pause, Lifecycle, and Composition Behavior
 
+- Pause and resume are idempotent and do not change current time.
+- Advancement while paused is ignored without validation side effects or hidden
+  accumulation; resuming restores only future explicit advancement.
+- Initialization is repeatably successful and state-neutral before shutdown.
+  Shutdown is idempotent and terminal while current time and pause state remain
+  readable.
+- Initialization after shutdown returns an actionable failed result. Pause,
+  resume, and advance throw `ObjectDisposedException` after shutdown.
+- `ManualRuntimeClock` implements `IRuntimeClock`, `IRuntimeClockControl`, and
+  `IRuntimeService`. Passing it explicitly to `RuntimeCompositionRoot.Compose`
+  proves compatibility and transfers lifecycle ownership without modifying or
+  expanding the accepted composition seam.
+
 ### Validation
+
+- Pre-implementation Unity 5.6 runtime EditMode baseline: passed 38 of 38 tests
+  with 118 assertions, 0 failures, 0 skipped, and 0 inconclusive tests.
+- Unity 5.6.7f1 batch import and compilation of an isolated project containing
+  the exact updated `Assets/Minerva` tree: passed without compiler or import
+  errors.
+- Complete Unity 5.6 runtime EditMode suite: passed 53 of 53 tests with 182
+  assertions, 0 failures, 0 skipped, and 0 inconclusive tests. The new focused
+  fixture contributed 15 passing tests and 64 assertions.
+- Unity metadata stability: passed for all committed `.meta` files and GUIDs.
+  Unity generated only uncommitted directory metadata in the isolated project
+  and did not rewrite any copied committed metadata.
+- Accepted-file integrity: passed; the accepted FND-002 through FND-004
+  production and test files are byte-unchanged from `main`.
+- Prohibited implementation search: passed; no Unity/editor/platform clock,
+  automatic advancement, scheduling, event integration, scene discovery,
+  reflection discovery, global access, singleton, asynchronous, persistence,
+  reset, restore, or catch-up implementation was introduced.
+- Forbidden asset and dependency check: passed; no scene, prefab,
+  ScriptableObject asset, assembly definition, package, vendor, or third-party
+  file was added.
+- Newline check: passed for every created text file and this ticket.
+- `git diff --check`: passed.
+- Workflow location check: passed for Active implementation; the ticket exists
+  only under `Docs/Tickets/Active/` with matching Status.
+- Authorized-path check: passed; all changes are limited to new approved Core
+  runtime files, one new approved runtime test fixture, their metadata, and
+  this ticket lifecycle/report update.
+- Linked epic check: passed against `main`; it exists and identifies FND-005 as
+  the sole Ready execution ticket. No planning file was changed.
 
 ### Deviations
 
+None.
+
 ### Blockers or Risks
+
+- Unity 5.6 emitted its previously observed legacy callback-unregistration and
+  player-communicator assertions while exiting after saving the successful test
+  result. It also reported an unavailable Unity public-CDN configuration
+  request. The process exited successfully and import, compilation, and all
+  tests passed.
 
 ### Optional Context Used
 
+None.
+
 ### Follow-Up Suggestions
 
+None.
 ## Implementation Review Agent Record
 
 Completed by the independent reviewer while the ticket is in Review.
@@ -435,6 +528,6 @@ Use YYYY-MM-DD HH:mm z in America/New_York.
 | State | Timestamp | Actor | Evidence or Notes |
 |---|---|---|---|
 | Planned | 2026-07-23 17:58 EDT | Technical Director | Readiness pass completed against accepted FND-004 composition contracts and tests; promotion change prepared. |
-| In Progress |  |  |  |
+| In Progress | 2026-07-23 20:03 EDT | Codex | Began implementation on `agent/fnd-005-core-clock-abstractions` from merged PR #13 (`642d84c`); ticket moved from Ready to Active. |
 | Committed |  |  |  |
 | Verified |  |  |  |
