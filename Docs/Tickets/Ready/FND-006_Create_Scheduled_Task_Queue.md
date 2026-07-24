@@ -506,7 +506,7 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 
 | State | Timestamp | Actor | Evidence or Notes |
 |---|---|---|---|
-| Planned | 2026-07-23  | Technical Director | FND-006 readiness and promotion authorized after merged FND-005. |
-| In Progress | 2026-07-23  | Technical Director | Readiness pass defined queue contracts, lifecycle, drain boundaries, and validation scope. |
+| Planned | 2026-07-23 20:43 EDT | Technical Director | FND-006 readiness and promotion authorized after merged FND-005. |
+| In Progress | 2026-07-23 20:43 EDT | Technical Director | Readiness pass defined queue contracts, lifecycle, drain boundaries, and validation scope. |
 | Committed |  |  |  |
 | Verified |  |  |  |
