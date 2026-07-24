@@ -1,7 +1,7 @@
 # FND-007: Create Runtime State Primitives
 
-**Status:** Ready  
-**Owner:** Unassigned  
+**Status:** Complete
+**Owner:** Codex
 **Created:** 2026-07-23  
 **Updated:** 2026-07-23  
 **Roadmap Phase:** Phase 1 — Foundation  
@@ -439,35 +439,35 @@ State mutation is authoritative before publication. Event failures are diagnosti
 
 ## Acceptance Criteria
 
-- [ ] FND-007 exists only under `Docs/Tickets/Review/` with `Status: Review` while independent review is pending.
-- [ ] All added production code is plain C# under `Minerva.Core` and is compatible with Unity 5.6.
-- [ ] State is represented by isolated generic typed cells, not a global or untyped key/value store.
-- [ ] Stable identity is immutable, owner-qualified, ordinal, case-sensitive, and independent of runtime object identity.
-- [ ] Read and mutation capabilities are separate and the mutable implementation is not exposed as a general store.
-- [ ] Equal identities on separately constructed cells remain isolated with no hidden uniqueness registry.
-- [ ] Null/default values are accepted unless rejected by an explicit validator.
-- [ ] Equality is deterministic through a fixed comparer, with `EqualityComparer<T>.Default` as the default.
-- [ ] Equal proposed values return `Unchanged`, skip validation, retain the original stored value, and publish nothing.
-- [ ] Differing proposed values invoke the validator exactly once when configured.
-- [ ] Initial validation uses an explicit context with no current value; mutation validation uses an explicit context with the authoritative current value.
-- [ ] Rejected validation returns an actionable immutable result, preserves state, creates no change, and publishes nothing.
-- [ ] Validator exceptions propagate without state mutation.
-- [ ] Applied mutations update state exactly once and return one immutable completed-change record with identity, previous value, and current value.
-- [ ] Event publication is optional, fixed at construction, and occurs only after an applied change.
-- [ ] Subscriber failures never roll back state and remain available through the accepted publication result.
-- [ ] Publisher exceptions do not roll back state and are represented without retaining exception objects.
-- [ ] Reentrant mutation through a subscriber is deterministic under the accepted queued nested-publication behavior.
-- [ ] The primitives own no publisher, subscription, lifecycle service, global registry, or composition-root modification.
-- [ ] The FND-008 boundary is preserved: no snapshot, restore, persistence, serialization, enumeration, or raw restore setter is added.
-- [ ] Separate cells and repeated construction share no mutable state.
-- [ ] No accepted FND-002 through FND-006 production or test file is modified.
-- [ ] Focused tests cover identity, construction, capability separation, equality, validation, null/default values, mutation outcomes, publication, publication failures, reentrancy, duplicates, composition compatibility, and instance isolation.
-- [ ] The complete existing runtime EditMode suite plus the new focused fixture passes in Unity 5.6 when available.
-- [ ] No editor-only reference, forbidden asset type, package, assembly definition, third-party dependency, service locator, global mutable state, scene discovery, or reflection discovery is introduced.
-- [ ] All new Unity assets have committed stable `.meta` files.
-- [ ] All new text files end with a newline and `git diff --check` passes.
-- [ ] The implementation pull request contains this ticket under `Docs/Tickets/Review/` while independent review is pending.
-- [ ] After acceptance, the implementation pull request contains this ticket under `Docs/Tickets/Complete/` before merge.
+- [x] FND-007 exists only under `Docs/Tickets/Review/` with `Status: Review` while independent review is pending.
+- [x] All added production code is plain C# under `Minerva.Core` and is compatible with Unity 5.6.
+- [x] State is represented by isolated generic typed cells, not a global or untyped key/value store.
+- [x] Stable identity is immutable, owner-qualified, ordinal, case-sensitive, and independent of runtime object identity.
+- [x] Read and mutation capabilities are separate and the mutable implementation is not exposed as a general store.
+- [x] Equal identities on separately constructed cells remain isolated with no hidden uniqueness registry.
+- [x] Null/default values are accepted unless rejected by an explicit validator.
+- [x] Equality is deterministic through a fixed comparer, with `EqualityComparer<T>.Default` as the default.
+- [x] Equal proposed values return `Unchanged`, skip validation, retain the original stored value, and publish nothing.
+- [x] Differing proposed values invoke the validator exactly once when configured.
+- [x] Initial validation uses an explicit context with no current value; mutation validation uses an explicit context with the authoritative current value.
+- [x] Rejected validation returns an actionable immutable result, preserves state, creates no change, and publishes nothing.
+- [x] Validator exceptions propagate without state mutation.
+- [x] Applied mutations update state exactly once and return one immutable completed-change record with identity, previous value, and current value.
+- [x] Event publication is optional, fixed at construction, and occurs only after an applied change.
+- [x] Subscriber failures never roll back state and remain available through the accepted publication result.
+- [x] Publisher exceptions do not roll back state and are represented without retaining exception objects.
+- [x] Reentrant mutation through a subscriber is deterministic under the accepted queued nested-publication behavior.
+- [x] The primitives own no publisher, subscription, lifecycle service, global registry, or composition-root modification.
+- [x] The FND-008 boundary is preserved: no snapshot, restore, persistence, serialization, enumeration, or raw restore setter is added.
+- [x] Separate cells and repeated construction share no mutable state.
+- [x] No accepted FND-002 through FND-006 production or test file is modified.
+- [x] Focused tests cover identity, construction, capability separation, equality, validation, null/default values, mutation outcomes, publication, publication failures, reentrancy, duplicates, composition compatibility, and instance isolation.
+- [x] The complete existing runtime EditMode suite plus the new focused fixture passes in Unity 5.6 when available.
+- [x] No editor-only reference, forbidden asset type, package, assembly definition, third-party dependency, service locator, global mutable state, scene discovery, or reflection discovery is introduced.
+- [x] All new Unity assets have committed stable `.meta` files.
+- [x] All new text files end with a newline and `git diff --check` passes.
+- [x] The implementation pull request contains this ticket under `Docs/Tickets/Review/` while independent review is pending.
+- [x] After acceptance, the implementation pull request contains this ticket under `Docs/Tickets/Complete/` before merge.
 
 ## Required Validation
 
@@ -530,49 +530,207 @@ Stop and report before implementation when:
 
 ## Definition of Done
 
-- [ ] Acceptance criteria satisfied.
-- [ ] Required validation reported accurately.
-- [ ] Documentation updated.
-- [ ] No unauthorized changes.
-- [ ] Implementation Report completed.
-- [ ] Independent Review record completed by the IRA.
-- [ ] Technical Director Acceptance completed before merge.
+- [x] Acceptance criteria satisfied.
+- [x] Required validation reported accurately.
+- [x] Documentation updated.
+- [x] No unauthorized changes.
+- [x] Implementation Report completed.
+- [x] Independent Review record completed by the IRA.
+- [x] Technical Director Acceptance completed before merge.
 
 ## Implementation Report
 
 ### Status
 
+Implementation is complete on
+`agent/fnd-007-runtime-state-primitives` and draft PR #18 is open against
+`main`. Static validation is complete. The implementation workspace did not
+contain Unity or a standalone C# compiler, so executable validation was
+performed afterward by the Repository Owner using the local Unity 5.6
+installation. Unity import and compilation succeeded, and the complete
+EditMode suite passed.
+
 ### Changed Files
+
+- Created `Assets/Minerva/Runtime/Core/IRuntimeState.cs`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeState.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeStateMutator.cs`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeStateMutator.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeStateValidator.cs`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeStateValidator.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeState.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeState.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateCapabilities.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateCapabilities.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateCell.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateCell.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateChange.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateChange.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateIdentity.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateIdentity.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateMutationResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateMutationResult.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateMutationStatus.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateMutationStatus.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStatePublicationFailure.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStatePublicationFailure.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateValidationContext.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateValidationContext.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateValidationResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateValidationResult.cs.meta`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/RuntimeStatePrimitivesTests.cs`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/RuntimeStatePrimitivesTests.cs.meta`.
+- Moved this ticket from `Docs/Tickets/Ready/` through
+  `Docs/Tickets/Active/` and `Docs/Tickets/Review/` to
+  `Docs/Tickets/Complete/`.
 
 ### Work Completed
 
+- Added immutable, owner-qualified `RuntimeStateIdentity` values with ordinal,
+  case-sensitive equality and deterministic hashing.
+- Added separate generic read and mutation capability contracts. The internal
+  state cell returns distinct adapters so a read capability cannot be cast into
+  mutation authority.
+- Added construction-fixed equality, validation, and optional event-publication
+  policies through one small factory boundary.
+- Added initial-value and transition validation contexts, actionable validation
+  results, and deterministic Changed, Unchanged, and Rejected outcomes.
+- Added immutable completed-change, mutation-result, and publisher-failure
+  diagnostics without retaining exception objects or mutable implementation
+  references.
+- Applied accepted mutations before publication, preserved them through
+  subscriber or publisher failure, and used the accepted exact generic event
+  type for completed-change publication.
+- Added focused coverage for identity, construction, capability separation,
+  equality, validation, null/default behavior, publication, reentrancy,
+  duplicate identities, composition compatibility, and instance isolation.
+
 ### Validation
+
+- Implementation-workspace limitation: no Unity executable or standalone C#
+  compiler was present, so executable validation could not run in that
+  environment.
+- Repository Owner local Unity 5.6 import and compilation: passed with exit
+  code `0`.
+- Complete runtime EditMode suite: `Passed`.
+- Test totals: 95 total, 95 passed, 412 assertions, 0 failures, 0 skipped, and
+  0 inconclusive.
+- Focused fixture authored: 23 FND-007 EditMode tests.
+- Authorized-path audit: passed; the implementation diff contains only new
+  Core runtime assets, the new focused runtime test assets, and this ticket.
+- Accepted-file audit: passed; no accepted production or test file changed.
+- Prohibited-API audit: passed; new runtime files contain no `UnityEditor`,
+  untyped state API, global registry, service locator, singleton, mutable static
+  collection, scene discovery, reflection discovery, concurrency, snapshot,
+  serialization, persistence, restore, file-I/O, or domain-state implementation.
+- Metadata audit: passed; all 14 new Unity assets have committed `.meta` files
+  and every new GUID occurs exactly once under `Assets/`.
+- Forbidden-asset audit: passed; no scene, prefab, ScriptableObject asset,
+  Resources asset, package, assembly definition, vendor file, or third-party
+  dependency was added.
+- Newline audit: passed for every new text file and this ticket.
+- `git diff --check`: passed.
+- Workflow-location audit: passed; this ticket exists only under
+  `Docs/Tickets/Complete/` with matching `Status`.
+
+#### Revalidation — 2026-07-23 22:21 EDT
+
+- Revalidated the complete PR #18 delta from merge base
+  `69ae2b3c08019d74a74b0fe5d28c04b78267439e` through implementation-report
+  head `ba9e416997aa9312c648de9d8e79a1eaf0e1be1b`.
+- Changed-path audit passed for all 29 paths: 28 new runtime/test assets and
+  metadata files plus this ticket's single `Ready` to `Review` move.
+- Accepted-file preservation passed: the delta adds new authorized assets and
+  moves this ticket; it does not modify an accepted production or test file.
+- Contract review passed without an implementation correction. The read
+  capability cannot be cast to the mutation capability, construction policies
+  remain fixed, equality precedes validation, accepted state becomes
+  authoritative before publication, and publisher failures cannot roll back
+  the value or retain exception objects.
+- The focused fixture still contains 23 authored tests and 110 authored
+  assertion sites. These counts describe source coverage only; they are not
+  represented as executed or passing tests.
+- Prohibited-symbol, forbidden-asset, metadata-presence, GUID-uniqueness,
+  final-newline, workflow-location, and `git diff --check` audits passed again.
+- Unity 5.6, Mono, Roslyn, `mcs`, `csc`, `msbuild`, and `dotnet` remain
+  unavailable. Unity import/compile and runtime EditMode execution therefore
+  remain explicitly unverified, with 0 tests executed locally and runtime
+  assertion/failure/skip/inconclusive totals unavailable.
+- No runtime or test change was required by revalidation.
+
+The unavailable executable checks in this historical revalidation record were
+superseded by the Repository Owner local validation recorded below.
+
+#### Repository Owner Local Validation — 2026-07-23 23:18 EDT
+
+- Unity 5.6 import and compilation completed with exit code `0`.
+- The complete EditMode suite reported `Passed`.
+- Results contained 95 total tests, 95 passed tests, 412 assertions, 0
+  failures, 0 skipped tests, and 0 inconclusive tests.
+- `git diff --check` passed.
+- The working tree returned clean after removing Unity-generated untracked
+  folder metadata and `ProjectSettings`.
+- Unity emitted non-blocking environment and shutdown warnings after successful
+  result writing: UnityShaderCompiler socket warnings, a callback
+  unregistration warning, and an `ms_Instance` assertion. These messages were
+  not test failures and did not change the passing XML result.
+- No runtime or test implementation file was changed during local validation.
 
 ### Deviations
 
+None.
+
 ### Blockers or Risks
+
+None. The implementation-workspace toolchain limitation was resolved through
+Repository Owner local Unity 5.6 validation.
 
 ### Optional Context Used
 
+None.
+
 ### Follow-Up Suggestions
 
+None.
 ## Implementation Review Agent Record
 
 Completed by the independent reviewer while the ticket is in `Review`.
 
 ### Reviewer
 
+Implementation Review Agent
+
 ### Reviewed PR and Head
+
+PR #18 at reviewed head
+`d6c5f0c7aaee7f6592652f5ec7bd7757163d15e0`.
 
 ### Scope and Acceptance Findings
 
+All 29 changed paths were authorized: 28 new FND-007 runtime/test assets with
+stable metadata plus this ticket's workflow movement. No accepted FND-002
+through FND-006 production or test file changed. The typed-state identity,
+capability separation, validation, mutation, publication, reentrancy,
+composition, and isolation behavior satisfies the ticket without prohibited
+scope expansion.
+
 ### Validation Assessment
+
+Accepted. Unity 5.6 import and compilation completed with exit code `0`. The
+complete EditMode suite passed 95 of 95 tests with 412 assertions, 0 failures,
+0 skipped tests, and 0 inconclusive tests. Static scope, metadata, prohibited
+API, newline, workflow, and `git diff --check` audits passed. The observed
+UnityShaderCompiler socket, callback-unregistration, and `ms_Instance` messages
+were non-blocking environment/shutdown warnings after successful result
+writing, not test failures.
 
 ### Blocking Findings
 
+None.
+
 ### Recommendation
 
-`Accept`, `Changes Required`, or `Blocked`.
+Accept.
 
 ## Technical Director Acceptance
 
@@ -580,19 +738,30 @@ Completed after reviewing the Implementation Review Agent recommendation and bef
 
 ### Decision
 
-`Accepted`, `Changes Required`, or `Blocked`.
+Accepted.
 
 ### PR Reference
 
+PR #18 at reviewed head
+`d6c5f0c7aaee7f6592652f5ec7bd7757163d15e0`.
+
 ### Acceptance Date
 
-Use `YYYY-MM-DD` in `America/New_York`.
+2026-07-23
 
 ### Final Validation Decision
 
+Accepted. The Implementation Review Agent found no blocking, major, or minor
+correctness issues, and the reported Unity 5.6 and static validation evidence
+satisfies FND-007's acceptance and Definition of Done requirements.
+
 ### Accepted Deviations
 
+None.
+
 ### Follow-Up Tickets
+
+None.
 
 ## Execution State Log
 
@@ -602,8 +771,10 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 |---|---|---|---|
 | Planned | 2026-07-23 21:31 EDT | Technical Director | FND-007 readiness and promotion authorized after merged FND-006. |
 | In Progress | 2026-07-23 21:31 EDT | Technical Director | Readiness pass resolved typed ownership, stable identity, mutation, event, composition, and snapshot boundaries. |
-| Active |  |  |  |
-| Committed |  |  |  |
-| Verified |  |  |  |
-| Reviewed |  |  |  |
-| Accepted |  |  |  |
+| Active | 2026-07-23 21:55 EDT | Codex | Began implementation on `agent/fnd-007-runtime-state-primitives` from merged PR #17 (`69ae2b3`). |
+| Committed | 2026-07-23 22:07 EDT | Codex | Commit `22c02589d26a30a297546e23121bc08c8c0898c9` contains the implementation and Active ticket state. |
+| Verified | 2026-07-23 22:08 EDT | Codex | Draft PR #18 opened against `main` at implementation head `22c02589d26a30a297546e23121bc08c8c0898c9`; local static audits passed and unavailable Unity validation is recorded. |
+| Verified | 2026-07-23 22:21 EDT | Codex | Revalidated PR #18 from merge base `69ae2b3` through head `ba9e416`; 29-path scope, accepted-file preservation, 23-test/110-assertion-site source coverage, prohibited-symbol, metadata, GUID, newline, workflow, and diff audits passed. Unity execution remains unavailable and unclaimed. |
+| Verified | 2026-07-23 23:18 EDT | Repository Owner | Local Unity 5.6 import/compile exited `0`; the complete EditMode suite passed 95/95 tests and 412 assertions with 0 failures, skipped, or inconclusive tests. `git diff --check` passed, and the working tree returned clean after generated-file cleanup. |
+| Reviewed | 2026-07-23 23:24 EDT | Implementation Review Agent | PR #18 reviewed at head `d6c5f0c7aaee7f6592652f5ec7bd7757163d15e0`; recommendation: Accept; no blocking, major, or minor findings. |
+| Accepted | 2026-07-23 23:25 EDT | Technical Director | IRA recommendation accepted; FND-007 approved as Complete and ready for repository-owner merge. |
