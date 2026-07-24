@@ -1,7 +1,7 @@
 # FND-006: Create Scheduled Task Queue
 
-**Status:** Ready  
-**Owner:** Unassigned  
+**Status:** Active
+**Owner:** Codex
 **Created:** 2026-07-23  
 **Updated:** 2026-07-23  
 **Roadmap Phase:** Phase 1 — Foundation  
@@ -448,19 +448,100 @@ Stop and report before implementation when:
 
 ### Status
 
+Implementation and required validation are complete on
+`agent/fnd-006-scheduled-task-queue`. The ticket remains Active until the draft
+implementation pull request opens.
+
 ### Changed Files
+
+- Created `Assets/Minerva/Runtime/Core/IScheduledTaskScheduler.cs`.
+- Created `Assets/Minerva/Runtime/Core/IScheduledTaskScheduler.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/IScheduledTaskProcessor.cs`.
+- Created `Assets/Minerva/Runtime/Core/IScheduledTaskProcessor.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/IScheduledTaskHandle.cs`.
+- Created `Assets/Minerva/Runtime/Core/IScheduledTaskHandle.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/ScheduledTaskState.cs`.
+- Created `Assets/Minerva/Runtime/Core/ScheduledTaskState.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/ScheduledTaskDrainResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/ScheduledTaskDrainResult.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/ScheduledTaskCallbackFailure.cs`.
+- Created `Assets/Minerva/Runtime/Core/ScheduledTaskCallbackFailure.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/ScheduledTaskQueue.cs`.
+- Created `Assets/Minerva/Runtime/Core/ScheduledTaskQueue.cs.meta`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/ScheduledTaskQueueTests.cs`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/ScheduledTaskQueueTests.cs.meta`.
+- Moved this ticket from `Docs/Tickets/Ready/` to
+  `Docs/Tickets/Active/`.
 
 ### Work Completed
 
+- Added separate XML-documented scheduling, processing, task-handle, state,
+  drain-result, and callback-failure contracts.
+- Added one sealed plain-C# queue that retains only `IRuntimeClock`, implements
+  `IRuntimeService`, uses instance-local monotonic insertion sequences, and
+  preserves due-time then insertion ordering.
+- Added exact pending, executing, completed, and cancelled handle transitions,
+  idempotent cancellation, prompt callback-reference release, terminal
+  shutdown, and state-neutral repeatable initialization.
+- Added one-clock-read and one-insertion-ceiling captured drain boundaries,
+  bounded callback attempts, cancellation skipping, exact remaining-work
+  reporting, deferred mutation semantics, and instance-local reentrancy
+  rejection.
+- Added per-callback exception isolation and immutable ordered diagnostics that
+  retain no exception, delegate, callback target, or mutable task entry.
+- Added one focused Unity 5.6-compatible fixture covering timestamp acceptance,
+  ordering, every task state, callback mutation, captured boundaries, bounded
+  draining, exact-limit exhaustion, diagnostics, reentrancy, shutdown,
+  composition order, sequence overflow, and instance isolation.
+
 ### Validation
+
+- Unity 5.6.7f1 batch import and compilation of an isolated project containing
+  the exact updated `Assets/Minerva` tree passed without compiler or import
+  errors.
+- The complete Unity 5.6 runtime EditMode suite passed 72 of 72 tests with 298
+  assertions, 0 failures, 0 skipped tests, and 0 inconclusive tests. The new
+  focused fixture contributed 19 passing tests and 116 assertions.
+- New metadata stability passed: Unity did not rewrite any committed new
+  `.meta` file, and every new GUID occurs exactly once under `Assets/Minerva`.
+- Accepted-file integrity passed: no existing accepted production or test file
+  differs from merge base
+  `8915c623f50cd42a41245c3bc0d3eec011bfccea`.
+- Prohibited implementation audits passed: the new runtime files contain no
+  Unity editor or time APIs, clock-control dependency, wall-clock or calendar
+  API, concurrency, task/async, timer, coroutine, MonoBehaviour, scene or
+  hierarchy discovery, service locator, reflection discovery, mutable static
+  state, automatic processing, recurrence, retry, rescheduling, priority,
+  persistence, event publication, or global scheduler access.
+- Forbidden asset and dependency validation passed: no scene, prefab,
+  ScriptableObject asset, assembly definition, package, vendor, third-party, or
+  editor-tool file was added.
+- Authorized-path validation passed: every change is a new approved Core
+  runtime file, the one approved runtime test fixture and metadata, or this
+  ticket lifecycle/report update.
+- Newline validation and `git diff --check` passed.
+- Workflow validation passed: this ticket exists exactly once under
+  `Docs/Tickets/Active/` with matching `Status`.
 
 ### Deviations
 
+None.
+
 ### Blockers or Risks
+
+- Unity 5.6 emitted its previously observed legacy callback-unregistration and
+  player-communicator assertions while exiting after saving the successful test
+  result. It also reported an unavailable Unity public-CDN configuration
+  request. The process exited successfully; import, compilation, and every test
+  passed.
 
 ### Optional Context Used
 
+None.
+
 ### Follow-Up Suggestions
+
+None.
 
 ## Implementation Review Agent Record
 
@@ -508,5 +589,6 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 |---|---|---|---|
 | Planned | 2026-07-23 20:43 EDT | Technical Director | FND-006 readiness and promotion authorized after merged FND-005. |
 | In Progress | 2026-07-23 20:43 EDT | Technical Director | Readiness pass defined queue contracts, lifecycle, drain boundaries, and validation scope. |
+| Active | 2026-07-23 21:03 EDT | Codex | Implementation began on `agent/fnd-006-scheduled-task-queue` from merge commit `8915c623f50cd42a41245c3bc0d3eec011bfccea`. |
 | Committed |  |  |  |
 | Verified |  |  |  |
