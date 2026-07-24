@@ -1,7 +1,7 @@
 # FND-007: Create Runtime State Primitives
 
-**Status:** Ready  
-**Owner:** Unassigned  
+**Status:** Active
+**Owner:** Codex
 **Created:** 2026-07-23  
 **Updated:** 2026-07-23  
 **Roadmap Phase:** Phase 1 — Foundation  
@@ -602,7 +602,7 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 |---|---|---|---|
 | Planned | 2026-07-23 21:31 EDT | Technical Director | FND-007 readiness and promotion authorized after merged FND-006. |
 | In Progress | 2026-07-23 21:31 EDT | Technical Director | Readiness pass resolved typed ownership, stable identity, mutation, event, composition, and snapshot boundaries. |
-| Active |  |  |  |
+| Active | 2026-07-23 21:55 EDT | Codex | Began implementation on `agent/fnd-007-runtime-state-primitives` from merged PR #17 (`69ae2b3`). |
 | Committed |  |  |  |
 | Verified |  |  |  |
 | Reviewed |  |  |  |
