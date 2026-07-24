@@ -172,8 +172,10 @@ if [ "${UNITY_LAUNCH_EXIT}" -ne 0 ]; then
     fail "${EXIT_UNITY_LAUNCH}" "Unity launch-only batch check exited ${UNITY_LAUNCH_EXIT}."
 fi
 
-case "${UNITY_VERSION}" in
-    5.6.7f1*)
+UNITY_VERSION_NORMALIZED="$(printf '%s\n' "${UNITY_VERSION}" | sed -n 's/.*\(5\.6\.7f1\).*/\1/p')"
+case "${UNITY_VERSION_NORMALIZED}" in
+    5.6.7f1)
+        UNITY_VERSION="${UNITY_VERSION_NORMALIZED}"
         ;;
     *)
         printf 'Unity launch log: %s\n' "${LAUNCH_LOG}" >&2
