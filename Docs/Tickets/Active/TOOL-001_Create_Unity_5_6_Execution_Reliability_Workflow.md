@@ -65,7 +65,7 @@ Do not inspect or modify runtime or test implementation files.
 - Support an explicit environment override without using broad or ambiguous system variable names.
 - Remain read-only with respect to the repository.
 - Check macOS, Unity executable and version, Git repository, clean working tree, branch and SHA, project lock or active Unity use, disk space, Unity Test Runner presence, Python 3, and Python XML parsing.
-- Run a launch-only Unity batch check that does not open or mutate the project.
+- Run a Unity batch launch against a disposable scratch project outside the repository.
 - Return deterministic nonzero exit codes and actionable messages.
 
 ### EditMode Verification

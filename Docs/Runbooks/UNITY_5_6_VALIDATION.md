@@ -77,7 +77,7 @@ Preflight is repository-read-only. It checks:
 - free disk space;
 - Test Runner extension;
 - Python XML support;
-- launch-only Unity batch execution;
+- Unity batch launch against a disposable scratch project outside the repository;
 - unchanged repository state after preflight.
 
 Do not continue after a failed preflight. Apply the printed correction and rerun.

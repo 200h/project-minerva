@@ -152,9 +152,16 @@ fi
 
 LAUNCH_LOG="$(mktemp "${TMPDIR:-/private/tmp}/minerva-unity56-preflight.XXXXXX")" ||
     fail "${EXIT_UNITY_LAUNCH}" "Unable to create a temporary launch log."
+SCRATCH_PROJECT="$(mktemp -d "${TMPDIR:-/private/tmp}/minerva-unity56-project.XXXXXX")" ||
+    fail "${EXIT_UNITY_LAUNCH}" "Unable to create a temporary scratch project."
 
-"${UNITY_EXECUTABLE}" -batchmode -quit -logFile "${LAUNCH_LOG}" >/dev/null 2>&1
+"${UNITY_EXECUTABLE}" \
+    -batchmode \
+    -quit \
+    -createProject "${SCRATCH_PROJECT}" \
+    -logFile "${LAUNCH_LOG}" >/dev/null 2>&1
 UNITY_LAUNCH_EXIT=$?
+rm -rf "${SCRATCH_PROJECT}"
 
 if [ -z "${UNITY_VERSION}" ]; then
     UNITY_VERSION="$(sed -n 's/.*Unity version: *//p' "${LAUNCH_LOG}" | head -n 1)"
