@@ -1,6 +1,6 @@
 # FND-008: Define Save Snapshot Contracts
 
-**Status:** Active
+**Status:** Review
 **Owner:** Codex
 **Created:** 2026-07-23  
 **Updated:** 2026-07-24  
@@ -544,19 +544,131 @@ Cover at minimum:
 
 ### Status
 
+Implementation is complete on `agent/fnd-008-save-snapshot-contracts`.
+Draft PR #21 is open against `main`, and this ticket remains in `Review`
+pending independent review and Technical Director acceptance.
+
 ### Changed Files
+
+- Created `Assets/Minerva/Runtime/Core/IRuntimeSnapshotContributor.cs`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeSnapshotContributor.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeSnapshotData.cs`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeSnapshotData.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeSnapshotRestoreOperation.cs`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeSnapshotRestoreOperation.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshot.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshot.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotCaptureResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotCaptureResult.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotContribution.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotContribution.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotContributionCaptureResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotContributionCaptureResult.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotContributionIdentity.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotContributionIdentity.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotCoordinator.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotCoordinator.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotDiagnostic.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotDiagnostic.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotOperationPhase.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotOperationPhase.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotPreparationResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotPreparationResult.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotRestoreOperation.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotRestoreOperation.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotRestoreResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotRestoreResult.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotStepResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeSnapshotStepResult.cs.meta`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/RuntimeSnapshotContractsTests.cs`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/RuntimeSnapshotContractsTests.cs.meta`.
+- Moved this ticket from `Docs/Tickets/Ready/` through
+  `Docs/Tickets/Active/` to `Docs/Tickets/Review/`.
 
 ### Work Completed
 
+- Added immutable owner-qualified contribution identities with ordinal,
+  case-sensitive equality and deterministic hashing.
+- Added format-agnostic detached payload, versioned contribution, aggregate
+  snapshot, contributor, capture, preparation, restore-operation, result, and
+  diagnostic contracts.
+- Added a restore-operation base that enforces single apply, rollback after an
+  apply attempt, completed-rollback idempotency, terminal release behavior,
+  and rejection of invalid lifecycle calls.
+- Added explicit immutable contributor registration with atomic rejection of
+  null contributors, null identities, nonpositive current schema versions,
+  and duplicate contribution identities.
+- Added deterministic registration-ordered capture with exact identity,
+  current-version, payload, result, and exception validation.
+- Added complete structural restore validation before participant preparation,
+  identity-based contribution matching, registration-ordered preparation and
+  apply, reverse rollback of all attempted operations, and reverse release of
+  every prepared operation.
+- Added immutable ordered primary, rollback, and release diagnostics without
+  retaining exceptions, delegates, participants, operations, or payloads.
+- Added same-coordinator capture/restore reentrancy rejection with
+  finally-equivalent idle restoration and independent coordinator isolation.
+- Added one focused fixture containing 23 tests across identity, capture,
+  structural validation, preparation, apply, rollback, release, failures,
+  reentrancy, composition coexistence, and isolation.
+
 ### Validation
+
+Implementation capability declaration:
+
+```text
+Repository editing: Available through the local Codex workspace
+C# compiler: Available through Unity 5.6.7f1
+Unity 5.6.7f1: Available locally
+Unity tests: Executed by the Local Unity Verification Operator in this session
+```
+
+- PR: #21, branch `agent/fnd-008-save-snapshot-contracts`.
+- Validated implementation head:
+  `2af88077e106386fa5087bb257c8ed91adbecaad`.
+- `./Tools/Verification/unity56-preflight.sh`: passed.
+- `./Tools/Verification/verify-unity56-editmode.sh`: passed.
+- Unity version: 5.6.7f1.
+- Import and compilation: passed, exit code `0`.
+- Complete EditMode suite: 118 total, 118 passed, 564 assertions, 0 failed,
+  0 skipped, and 0 inconclusive.
+- Focused fixture: 23 FND-008 tests.
+- Known warnings: 2 UnityShaderCompiler socket warnings, 1 callback
+  unregistration warning, and 1 `ms_Instance` shutdown assertion.
+- Unknown blocking errors or exceptions: 0.
+- Repository integrity: tracked and committed metadata remained unchanged,
+  generated paths were safely cleaned, and the worktree was restored clean.
+- `git diff --check`: passed.
+- Evidence:
+  `/private/tmp/project-minerva-unity/verification.1a0qlh/verification-summary.md`.
+- Authorized-path audit: passed; the implementation changes only new Core
+  runtime assets, one new focused runtime EditMode fixture, stable metadata,
+  and this ticket.
+- Accepted-file audit: passed; no accepted production or test file changed.
+- Prohibited-API audit: passed; new runtime files contain no storage,
+  serialization, migration, domain, event, Unity, reflection, scene,
+  concurrency, or global-access implementation.
+- Forbidden-asset audit: passed; no package, scene, prefab, ScriptableObject,
+  Resources asset, assembly definition, vendor file, or dependency was added.
+- Metadata audit: passed; all 16 new Unity assets have committed metadata and
+  every GUID is unique under `Assets/`.
+- Newline audit: passed for every new text file.
 
 ### Deviations
 
+None.
+
 ### Blockers or Risks
+
+None.
 
 ### Optional Context Used
 
+None.
+
 ### Follow-Up Suggestions
+
+None.
 
 ## Implementation Review Agent Record
 
@@ -604,5 +716,5 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 |---|---|---|---|
 | Planned | 2026-07-24 | Technical Director | FND-007 is complete, PR #19 execution reliability is merged, and FND-008 readiness scope was approved for promotion. |
 | In Progress | 2026-07-24 01:42 EDT | Codex | Began implementation on `agent/fnd-008-save-snapshot-contracts` from merged PR #20 (`4dd2082`). Repository editing, Unity 5.6.7f1, and Unity-backed C# compilation are available locally; mandatory validation is assigned to the Local Unity Verification Operator in this session. |
-| Committed |  |  |  |
-| Verified |  |  |  |
+| Committed | 2026-07-24 01:49 EDT | Codex | Commit `2af88077e106386fa5087bb257c8ed91adbecaad` contains the FND-008 implementation, focused tests, stable metadata, and Active ticket state. |
+| Verified | 2026-07-24 01:53 EDT | Codex | Draft PR #21 opened against `main`; Unity 5.6.7f1 import/compile and the complete 118-test, 564-assertion EditMode suite passed at implementation head `2af88077`; static scope, metadata, prohibited API, newline, and diff audits passed. |
