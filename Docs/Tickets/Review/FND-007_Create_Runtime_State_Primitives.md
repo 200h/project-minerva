@@ -1,6 +1,6 @@
 # FND-007: Create Runtime State Primitives
 
-**Status:** Active
+**Status:** Review
 **Owner:** Codex
 **Created:** 2026-07-23  
 **Updated:** 2026-07-23  
@@ -542,20 +542,110 @@ Stop and report before implementation when:
 
 ### Status
 
+Implementation is complete on
+`agent/fnd-007-runtime-state-primitives` and draft PR #18 is open against
+`main`. Static validation is complete. Unity 5.6 import, compilation, and
+EditMode execution are unavailable in the implementation workspace and remain
+explicitly unverified for independent review.
+
 ### Changed Files
+
+- Created `Assets/Minerva/Runtime/Core/IRuntimeState.cs`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeState.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeStateMutator.cs`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeStateMutator.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeStateValidator.cs`.
+- Created `Assets/Minerva/Runtime/Core/IRuntimeStateValidator.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeState.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeState.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateCapabilities.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateCapabilities.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateCell.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateCell.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateChange.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateChange.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateIdentity.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateIdentity.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateMutationResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateMutationResult.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateMutationStatus.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateMutationStatus.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStatePublicationFailure.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStatePublicationFailure.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateValidationContext.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateValidationContext.cs.meta`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateValidationResult.cs`.
+- Created `Assets/Minerva/Runtime/Core/RuntimeStateValidationResult.cs.meta`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/RuntimeStatePrimitivesTests.cs`.
+- Created `Assets/Minerva/Tests/Runtime/Editor/RuntimeStatePrimitivesTests.cs.meta`.
+- Moved this ticket from `Docs/Tickets/Ready/` through
+  `Docs/Tickets/Active/` to `Docs/Tickets/Review/`.
 
 ### Work Completed
 
+- Added immutable, owner-qualified `RuntimeStateIdentity` values with ordinal,
+  case-sensitive equality and deterministic hashing.
+- Added separate generic read and mutation capability contracts. The internal
+  state cell returns distinct adapters so a read capability cannot be cast into
+  mutation authority.
+- Added construction-fixed equality, validation, and optional event-publication
+  policies through one small factory boundary.
+- Added initial-value and transition validation contexts, actionable validation
+  results, and deterministic Changed, Unchanged, and Rejected outcomes.
+- Added immutable completed-change, mutation-result, and publisher-failure
+  diagnostics without retaining exception objects or mutable implementation
+  references.
+- Applied accepted mutations before publication, preserved them through
+  subscriber or publisher failure, and used the accepted exact generic event
+  type for completed-change publication.
+- Added focused coverage for identity, construction, capability separation,
+  equality, validation, null/default behavior, publication, reentrancy,
+  duplicate identities, composition compatibility, and instance isolation.
+
 ### Validation
+
+- Unity 5.6 availability: unavailable; no Unity executable was present in the
+  implementation workspace.
+- C# compiler availability: unavailable; no local Mono, Roslyn, `mcs`, `csc`,
+  `msbuild`, or `dotnet` executable was present.
+- Runtime EditMode suite: not executed because Unity 5.6 was unavailable.
+- Test totals: 0 executed; assertion, failure, skipped, and inconclusive totals
+  are unavailable rather than reported as passing.
+- Focused fixture authored: 23 FND-007 EditMode tests.
+- Authorized-path audit: passed; the implementation diff contains only new
+  Core runtime assets, the new focused runtime test assets, and this ticket.
+- Accepted-file audit: passed; no accepted production or test file changed.
+- Prohibited-API audit: passed; new runtime files contain no `UnityEditor`,
+  untyped state API, global registry, service locator, singleton, mutable static
+  collection, scene discovery, reflection discovery, concurrency, snapshot,
+  serialization, persistence, restore, file-I/O, or domain-state implementation.
+- Metadata audit: passed; all 14 new Unity assets have committed `.meta` files
+  and every new GUID occurs exactly once under `Assets/`.
+- Forbidden-asset audit: passed; no scene, prefab, ScriptableObject asset,
+  Resources asset, package, assembly definition, vendor file, or third-party
+  dependency was added.
+- Newline audit: passed for every new text file and this ticket.
+- `git diff --check`: passed.
+- Workflow-location audit: passed; this ticket exists only under
+  `Docs/Tickets/Review/` with matching `Status`.
 
 ### Deviations
 
+None.
+
 ### Blockers or Risks
+
+- Unity 5.6 import/compile and the full runtime EditMode suite were unavailable
+  locally. Independent review must treat those checks as unverified rather than
+  passed.
 
 ### Optional Context Used
 
+None.
+
 ### Follow-Up Suggestions
 
+None.
 ## Implementation Review Agent Record
 
 Completed by the independent reviewer while the ticket is in `Review`.
@@ -603,7 +693,7 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 | Planned | 2026-07-23 21:31 EDT | Technical Director | FND-007 readiness and promotion authorized after merged FND-006. |
 | In Progress | 2026-07-23 21:31 EDT | Technical Director | Readiness pass resolved typed ownership, stable identity, mutation, event, composition, and snapshot boundaries. |
 | Active | 2026-07-23 21:55 EDT | Codex | Began implementation on `agent/fnd-007-runtime-state-primitives` from merged PR #17 (`69ae2b3`). |
-| Committed |  |  |  |
-| Verified |  |  |  |
+| Committed | 2026-07-23 22:07 EDT | Codex | Commit `22c02589d26a30a297546e23121bc08c8c0898c9` contains the implementation and Active ticket state. |
+| Verified | 2026-07-23 22:08 EDT | Codex | Draft PR #18 opened against `main` at implementation head `22c02589d26a30a297546e23121bc08c8c0898c9`; local static audits passed and unavailable Unity validation is recorded. |
 | Reviewed |  |  |  |
 | Accepted |  |  |  |
