@@ -544,9 +544,11 @@ Stop and report before implementation when:
 
 Implementation is complete on
 `agent/fnd-007-runtime-state-primitives` and draft PR #18 is open against
-`main`. Static validation is complete. Unity 5.6 import, compilation, and
-EditMode execution are unavailable in the implementation workspace and remain
-explicitly unverified for independent review.
+`main`. Static validation is complete. The implementation workspace did not
+contain Unity or a standalone C# compiler, so executable validation was
+performed afterward by the Repository Owner using the local Unity 5.6
+installation. Unity import and compilation succeeded, and the complete
+EditMode suite passed.
 
 ### Changed Files
 
@@ -604,13 +606,14 @@ explicitly unverified for independent review.
 
 ### Validation
 
-- Unity 5.6 availability: unavailable; no Unity executable was present in the
-  implementation workspace.
-- C# compiler availability: unavailable; no local Mono, Roslyn, `mcs`, `csc`,
-  `msbuild`, or `dotnet` executable was present.
-- Runtime EditMode suite: not executed because Unity 5.6 was unavailable.
-- Test totals: 0 executed; assertion, failure, skipped, and inconclusive totals
-  are unavailable rather than reported as passing.
+- Implementation-workspace limitation: no Unity executable or standalone C#
+  compiler was present, so executable validation could not run in that
+  environment.
+- Repository Owner local Unity 5.6 import and compilation: passed with exit
+  code `0`.
+- Complete runtime EditMode suite: `Passed`.
+- Test totals: 95 total, 95 passed, 412 assertions, 0 failures, 0 skipped, and
+  0 inconclusive.
 - Focused fixture authored: 23 FND-007 EditMode tests.
 - Authorized-path audit: passed; the implementation diff contains only new
   Core runtime assets, the new focused runtime test assets, and this ticket.
@@ -654,15 +657,32 @@ explicitly unverified for independent review.
   assertion/failure/skip/inconclusive totals unavailable.
 - No runtime or test change was required by revalidation.
 
+The unavailable executable checks in this historical revalidation record were
+superseded by the Repository Owner local validation recorded below.
+
+#### Repository Owner Local Validation — 2026-07-23 23:18 EDT
+
+- Unity 5.6 import and compilation completed with exit code `0`.
+- The complete EditMode suite reported `Passed`.
+- Results contained 95 total tests, 95 passed tests, 412 assertions, 0
+  failures, 0 skipped tests, and 0 inconclusive tests.
+- `git diff --check` passed.
+- The working tree returned clean after removing Unity-generated untracked
+  folder metadata and `ProjectSettings`.
+- Unity emitted non-blocking environment and shutdown warnings after successful
+  result writing: UnityShaderCompiler socket warnings, a callback
+  unregistration warning, and an `ms_Instance` assertion. These messages were
+  not test failures and did not change the passing XML result.
+- No runtime or test implementation file was changed during local validation.
+
 ### Deviations
 
 None.
 
 ### Blockers or Risks
 
-- Unity 5.6 import/compile and the full runtime EditMode suite were unavailable
-  locally. Independent review must treat those checks as unverified rather than
-  passed.
+None. The implementation-workspace toolchain limitation was resolved through
+Repository Owner local Unity 5.6 validation.
 
 ### Optional Context Used
 
@@ -721,5 +741,6 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 | Committed | 2026-07-23 22:07 EDT | Codex | Commit `22c02589d26a30a297546e23121bc08c8c0898c9` contains the implementation and Active ticket state. |
 | Verified | 2026-07-23 22:08 EDT | Codex | Draft PR #18 opened against `main` at implementation head `22c02589d26a30a297546e23121bc08c8c0898c9`; local static audits passed and unavailable Unity validation is recorded. |
 | Verified | 2026-07-23 22:21 EDT | Codex | Revalidated PR #18 from merge base `69ae2b3` through head `ba9e416`; 29-path scope, accepted-file preservation, 23-test/110-assertion-site source coverage, prohibited-symbol, metadata, GUID, newline, workflow, and diff audits passed. Unity execution remains unavailable and unclaimed. |
+| Verified | 2026-07-23 23:18 EDT | Repository Owner | Local Unity 5.6 import/compile exited `0`; the complete EditMode suite passed 95/95 tests and 412 assertions with 0 failures, skipped, or inconclusive tests. `git diff --check` passed, and the working tree returned clean after generated-file cleanup. |
 | Reviewed |  |  |  |
 | Accepted |  |  |  |
