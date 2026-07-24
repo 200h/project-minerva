@@ -1,11 +1,11 @@
 # [PREFIX-NNN]: [Ticket Title]
 
-**Status:** Backlog  
-**Owner:** Unassigned  
-**Created:** YYYY-MM-DD  
-**Updated:** YYYY-MM-DD  
-**Roadmap Phase:**  
-**Epic:** [Epic Name](../../../Planning/Epics/EPIC_FILE.md)  
+**Status:** Backlog
+**Owner:** Unassigned
+**Created:** YYYY-MM-DD
+**Updated:** YYYY-MM-DD
+**Roadmap Phase:**
+**Epic:** [Epic Name](../../../Planning/Epics/EPIC_FILE.md)
 **Related ADRs:**
 
 ## Summary
@@ -18,38 +18,57 @@
 
 Read only:
 
-- 
+-
 
 ## Optional Context
 
 Read only when required by a specific implementation question:
 
-- 
+-
 
 ## Code Areas to Inspect
 
-- 
+-
+
+## Execution Environment
+
+Complete this section for Unity-related work. Use `Not applicable` only when the ticket has no Unity execution requirement.
+
+**Implementation Environment:**
+**Unity Execution Environment:**
+**Unity Version:**
+**Unity Executable:**
+**Validation Responsibility:**
+
+Implementation capability declaration:
+
+```text
+Repository editing:
+C# compiler:
+Unity 5.6.7f1:
+Unity tests:
+```
 
 ## Requirements
 
-- 
+-
 
 ## Out of Scope
 
-- 
+-
 
 ## Dependencies and Prerequisites
 
-- 
+-
 
 ## Authorized Files or Directories
 
-- 
+-
 - This ticket file for status movement and implementation reporting.
 
 ## Prohibited Files or Systems
 
-- 
+-
 
 ## Permitted Actions
 
@@ -61,11 +80,11 @@ Read only when required by a specific implementation question:
 
 - Do not move this ticket to `Complete`; independent review and Technical Director acceptance are required.
 - Do not merge the implementation pull request.
-- 
+-
 
 ## Expected Files
 
-- 
+-
 
 ## Documentation Updates
 
@@ -80,17 +99,18 @@ Read only when required by a specific implementation question:
 
 ## Acceptance Criteria
 
-- [ ] 
+- [ ]
 - [ ] The ticket directory and `Status` metadata match throughout implementation.
 - [ ] The implementation pull request contains this ticket under `Docs/Tickets/Review/` while independent review is pending.
 - [ ] After acceptance, the implementation pull request contains this ticket under `Docs/Tickets/Complete/` before merge.
 
 ## Required Validation
 
-- 
+-
 - Confirm the ticket exists in exactly one workflow directory.
 - Confirm the directory and `Status` field match.
 - Confirm the linked epic exists and identifies this ticket correctly.
+- For Unity-related work, follow [`../Runbooks/UNITY_5_6_VALIDATION.md`](../Runbooks/UNITY_5_6_VALIDATION.md) and record the exact validated branch and SHA.
 
 ## Definition of Done
 

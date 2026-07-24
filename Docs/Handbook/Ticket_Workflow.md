@@ -1,10 +1,10 @@
 # Ticket Workflow
 
-**Version:** 1.2  
-**Status:** Draft  
-**Owner:** Technical Director  
-**Last Updated:** 2026-07-23  
-**Related Documents:** [`../Project/AI_ENGINEERING_GUIDE.md`](../Project/AI_ENGINEERING_GUIDE.md), [`../Templates/Ticket_Template.md`](../Templates/Ticket_Template.md)
+**Version:** 1.3
+**Status:** Draft
+**Owner:** Technical Director
+**Last Updated:** 2026-07-24
+**Related Documents:** [`../Project/AI_ENGINEERING_GUIDE.md`](../Project/AI_ENGINEERING_GUIDE.md), [`../Templates/Ticket_Template.md`](../Templates/Ticket_Template.md), [`../Process/UNITY_EXECUTION_MODEL.md`](../Process/UNITY_EXECUTION_MODEL.md), [`../Runbooks/UNITY_5_6_VALIDATION.md`](../Runbooks/UNITY_5_6_VALIDATION.md)
 
 ## Purpose
 
@@ -141,6 +141,20 @@ A ticket-driven implementation pull request must include the ticket in `Review/`
 After successful review and Technical Director acceptance, the same implementation pull request must include the ticket in `Complete/` before merge. A separate post-merge closeout pull request is not required.
 
 GitHub pull-request state is authoritative for whether accepted work has merged. Ticket directories do not duplicate GitHub's merge-state tracking.
+
+### Unity Implementation Handoff
+
+Unity-related tickets follow the [Unity Execution Model](../Process/UNITY_EXECUTION_MODEL.md). Before implementation begins, the ticket or handoff must identify:
+
+- implementation environment;
+- Unity execution environment;
+- Unity version;
+- Unity executable;
+- validation responsibility.
+
+When the implementation environment lacks Unity, the implementation may enter `Review` with Unity validation explicitly pending. Independent acceptance remains blocked until the Local Unity Verification Operator validates the exact review head using the [Unity 5.6 Validation Runbook](../Runbooks/UNITY_5_6_VALIDATION.md).
+
+The handoff must include the PR, branch, exact head SHA, changed paths, expected test scope, completed validation, pending validation, and the standard local command.
 
 ## Scope Changes
 

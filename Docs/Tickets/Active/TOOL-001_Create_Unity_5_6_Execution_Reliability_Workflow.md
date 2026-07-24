@@ -1,11 +1,11 @@
 # TOOL-001: Create Unity 5.6 Execution Reliability Workflow
 
-**Status:** Ready  
-**Owner:** Unassigned  
-**Created:** 2026-07-24  
-**Updated:** 2026-07-24  
-**Roadmap Phase:** Phase 1 — Foundation  
-**Epic:** None  
+**Status:** Active
+**Owner:** Codex
+**Created:** 2026-07-24
+**Updated:** 2026-07-24
+**Roadmap Phase:** Phase 1 — Foundation
+**Epic:** None
 **Related ADRs:** [`../../ADR/0001_Use_Unity_5_6.md`](../../ADR/0001_Use_Unity_5_6.md), [`../../ADR/0004_Ticket_Driven_AI_Implementation.md`](../../ADR/0004_Ticket_Driven_AI_Implementation.md)
 
 ## Summary
@@ -289,6 +289,6 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 | State | Timestamp | Actor | Evidence or Notes |
 |---|---|---|---|
 | Planned | 2026-07-24 00:09 EDT | Technical Director | Scope approved by Repository Owner and captured in TOOL-001. |
-| In Progress |  |  |  |
+| In Progress | 2026-07-24 00:09 EDT | Codex | Ticket moved to Active; implementation started on `tool/unity56-execution-reliability`. |
 | Committed |  |  |  |
 | Verified |  |  |  |
