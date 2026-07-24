@@ -1,7 +1,7 @@
 # FND-008: Define Save Snapshot Contracts
 
-**Status:** Ready  
-**Owner:** Unassigned  
+**Status:** Active
+**Owner:** Codex
 **Created:** 2026-07-23  
 **Updated:** 2026-07-24  
 **Roadmap Phase:** Phase 1 — Foundation  
@@ -603,6 +603,6 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 | State | Timestamp | Actor | Evidence or Notes |
 |---|---|---|---|
 | Planned | 2026-07-24 | Technical Director | FND-007 is complete, PR #19 execution reliability is merged, and FND-008 readiness scope was approved for promotion. |
-| In Progress |  |  |  |
+| In Progress | 2026-07-24 01:42 EDT | Codex | Began implementation on `agent/fnd-008-save-snapshot-contracts` from merged PR #20 (`4dd2082`). Repository editing, Unity 5.6.7f1, and Unity-backed C# compilation are available locally; mandatory validation is assigned to the Local Unity Verification Operator in this session. |
 | Committed |  |  |  |
 | Verified |  |  |  |
