@@ -1,6 +1,6 @@
 # TOOL-001: Create Unity 5.6 Execution Reliability Workflow
 
-**Status:** Active
+**Status:** Review
 **Owner:** Codex
 **Created:** 2026-07-24
 **Updated:** 2026-07-24
@@ -188,20 +188,20 @@ Do not inspect or modify runtime or test implementation files.
 
 ## Acceptance Criteria
 
-- [ ] The runbook and execution model clearly separate cloud implementation from local Unity verification.
-- [ ] Unity-related handoffs require an explicit environment declaration.
-- [ ] Preflight is repository-read-only and reports all required capability checks.
-- [ ] One command performs import, compilation, full EditMode tests, XML parsing, integrity checks, cleanup, and evidence generation.
-- [ ] Missing or invalid XML causes a clear nonzero failure.
-- [ ] Exact test and assertion totals are printed automatically.
-- [ ] Known warnings are reported but never used to hide unknown errors.
-- [ ] Unexpected untracked content is rejected and preserved.
-- [ ] No broad Git cleanup command is used.
-- [ ] Worktree helpers are safe and non-forcing, or their omission is justified.
-- [ ] Shell validation and targeted mock tests pass.
-- [ ] No runtime or test implementation file changes.
-- [ ] The ticket directory and `Status` metadata match throughout implementation.
-- [ ] The implementation pull request contains this ticket under `Docs/Tickets/Review/` while independent review is pending.
+- [x] The runbook and execution model clearly separate cloud implementation from local Unity verification.
+- [x] Unity-related handoffs require an explicit environment declaration.
+- [x] Preflight is repository-read-only and reports all required capability checks.
+- [x] One command performs import, compilation, full EditMode tests, XML parsing, integrity checks, cleanup, and evidence generation.
+- [x] Missing or invalid XML causes a clear nonzero failure.
+- [x] Exact test and assertion totals are printed automatically.
+- [x] Known warnings are reported but never used to hide unknown errors.
+- [x] Unexpected untracked content is rejected and preserved.
+- [x] No broad Git cleanup command is used.
+- [x] Worktree helpers are safe and non-forcing, or their omission is justified.
+- [x] Shell validation and targeted mock tests pass.
+- [x] No runtime or test implementation file changes.
+- [x] The ticket directory and `Status` metadata match throughout implementation.
+- [x] The implementation pull request contains this ticket under `Docs/Tickets/Review/` while independent review is pending.
 - [ ] After acceptance, the implementation pull request contains this ticket under `Docs/Tickets/Complete/` before merge.
 
 ## Required Validation
@@ -221,28 +221,88 @@ Do not inspect or modify runtime or test implementation files.
 ## Definition of Done
 
 - [ ] Acceptance criteria satisfied.
-- [ ] Required validation reported accurately.
-- [ ] Documentation updated.
-- [ ] No unauthorized changes.
-- [ ] Implementation report completed.
+- [x] Required validation reported accurately.
+- [x] Documentation updated.
+- [x] No unauthorized changes.
+- [x] Implementation report completed.
 
 ## Implementation Report
 
 ### Status
 
+Implementation complete. Independent review pending.
+
 ### Changed Files
+
+- `Docs/Handbook/Testing_Strategy.md`
+- `Docs/Handbook/Ticket_Workflow.md`
+- `Docs/Process/UNITY_EXECUTION_MODEL.md`
+- `Docs/Project/AI_ENGINEERING_GUIDE.md`
+- `Docs/Runbooks/UNITY_5_6_VALIDATION.md`
+- `Docs/Templates/Ticket_Template.md`
+- `Docs/Tickets/Review/TOOL-001_Create_Unity_5_6_Execution_Reliability_Workflow.md`
+- `Tools/Verification/README.md`
+- `Tools/Verification/create-unity-worktree.sh`
+- `Tools/Verification/remove-unity-worktree.sh`
+- `Tools/Verification/tests/test-verification-scripts.sh`
+- `Tools/Verification/unity56-preflight.sh`
+- `Tools/Verification/verify-unity56-editmode.sh`
 
 ### Work Completed
 
+- Documented cloud/local execution classification, required environment declarations, validation handoffs, and the Local Unity Verification Operator role.
+- Added a read-only macOS and Unity 5.6.7f1 preflight with actionable exit codes.
+- Added one-command import, compilation, EditMode testing, XML parsing, warning classification, fail-closed cleanup, integrity verification, and Markdown evidence generation.
+- Added detached worktree creation and clean non-forcing removal helpers.
+- Added a mock Unity harness covering passing validation, missing XML, unexpected generated paths, repository restoration, and worktree helper behavior.
+
 ### Validation
+
+- `bash -n Tools/Verification/*.sh Tools/Verification/tests/*.sh`: passed.
+- `shellcheck`: unavailable in the local environment; no installation was attempted.
+- Mock harness: passed all scenarios.
+- Missing XML scenario: returned exit `41`, preserved evidence, and restored the mock repository.
+- Unexpected-path scenario: returned exit `60`, preserved the unexpected file, and refused cleanup until the harness removed its own fixture.
+- Worktree helper scenario: created a detached worktree and removed it only while clean, without force.
+- Real Unity validation:
+  - branch: `tool/unity56-execution-reliability`
+  - validated implementation SHA: `78a9906f2326f7ba044efc03e49b48faccd1a13d`
+  - Unity: `5.6.7f1`
+  - import/compilation: passed, exit `0`
+  - EditMode result: `Passed`, Unity exit `0`
+  - tests: `95/95`
+  - assertions: `412`
+  - failed: `0`
+  - skipped: `0`
+  - inconclusive: `0`
+  - UnityShaderCompiler warnings: `2`
+  - callback-unregistration warnings: `1`
+  - `ms_Instance` shutdown assertions: `1`
+  - unknown blocking errors or exceptions: `0`
+  - repository restored: yes
+  - `git diff --check`: passed
+  - evidence: `/private/tmp/project-minerva-unity/verification.5CD3hN/verification-summary.md`
+- Broad cleanup audit: no `git clean` invocation or forced worktree removal exists in shell scripts.
+- Scope audit: no path under `Assets/`, `ProjectSettings/`, `Packages/`, or `Planning/` changed.
 
 ### Deviations
 
+- The Unity launch preflight uses a disposable scratch project outside the repository. Unity 5.6.7f1 aborts on macOS 12 when launched in batch mode without any project. The scratch project preserves the preflight's repository-read-only guarantee.
+- `shellcheck` was unavailable; `bash -n`, the mock harness, targeted audits, and a real Unity run were used.
+
 ### Blockers or Risks
+
+- No implementation blocker.
+- Known Unity 5.6 shutdown/environment warnings remain nonblocking only under the documented authoritative passing-XML conditions.
 
 ### Optional Context Used
 
+- Completed FND-007 validation evidence informed the known warnings, expected `95/95` test and `412` assertion baseline, and generated-path allowlist.
+
 ### Follow-Up Suggestions
+
+- Exercise the scripts periodically after macOS, Unity installation, or repository-layout changes.
+- Consider a dedicated validation Mac only if Unity-ticket volume later justifies it.
 
 ## Implementation Review Agent Record
 
@@ -290,5 +350,5 @@ Use `YYYY-MM-DD HH:mm z` in `America/New_York`.
 |---|---|---|---|
 | Planned | 2026-07-24 00:09 EDT | Technical Director | Scope approved by Repository Owner and captured in TOOL-001. |
 | In Progress | 2026-07-24 00:09 EDT | Codex | Ticket moved to Active; implementation started on `tool/unity56-execution-reliability`. |
-| Committed |  |  |  |
-| Verified |  |  |  |
+| Committed | 2026-07-24 00:18 EDT | Codex | Implementation commits `2c8b871`, `14d790f`, and `78a9906` recorded on the tooling branch. |
+| Verified | 2026-07-24 00:21 EDT | Codex | Mock safety harness passed; real Unity 5.6.7f1 validation passed 95/95 tests and 412 assertions with the repository restored clean. |
